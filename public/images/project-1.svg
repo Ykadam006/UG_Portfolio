@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <rect width="1200" height="720" fill="#faf8f5"/>
+  <rect x="48" y="48" width="1104" height="624" rx="32" fill="#ffffff" stroke="#e5e7eb"/>
+  <text x="600" y="360" text-anchor="middle" fill="#c67c4e" font-family="system-ui" font-size="32" font-weight="600">Student Marketing</text>
+</svg>
