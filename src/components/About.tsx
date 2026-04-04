@@ -10,52 +10,49 @@ export function About() {
   return (
     <section
       id="about"
-      className="scroll-mt-28 border-b border-border bg-background py-20 md:py-28"
+      className="scroll-mt-24 border-b border-border bg-background py-24 md:py-32"
     >
-      <div className="mx-auto max-w-6xl px-5 md:px-8">
+      <div className="mx-auto max-w-5xl px-5 md:px-8">
+        {/* Svarog-style centered heading with italic serif mix */}
         <SectionReveal>
-          <p className="text-xs font-semibold tracking-[0.22em] text-accent uppercase">
-            What I bring
-          </p>
-          <h2 className="mt-4 font-display text-3xl text-foreground md:text-4xl">
-            Editorial clarity meets practical execution
-          </h2>
-        </SectionReveal>
-
-        <div className="mt-12 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:items-start">
-          <SectionReveal>
-            <p className="text-lg leading-relaxed text-muted-foreground">
+          <div className="mb-16 text-center">
+            <h2 className="font-sans text-[2.25rem] font-bold leading-tight tracking-tight text-foreground md:text-[3.5rem]">
+              What{" "}
+              <em className="font-display not-italic italic">I Bring</em>
+            </h2>
+            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-muted-foreground md:text-lg">
               {about.bio}
             </p>
-          </SectionReveal>
-
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
-            {about.cards.map((card) => {
-              const Icon = card.icon;
-              return (
-                <SectionReveal key={card.title}>
-                  <motion.div
-                    whileHover={{ y: -4 }}
-                    transition={{ duration: 0.2, ease: "easeOut" }}
-                    className={cn(
-                      "group h-full rounded-2xl border border-border bg-card p-6 transition-colors",
-                      "hover:border-accent"
-                    )}
-                  >
-                    <div className="mb-4 inline-flex size-11 items-center justify-center rounded-xl bg-hover-card text-accent ring-1 ring-border group-hover:ring-accent/40">
-                      <Icon className="size-5" strokeWidth={1.75} />
-                    </div>
-                    <h3 className="font-display text-xl text-foreground">
-                      {card.title}
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                      {card.description}
-                    </p>
-                  </motion.div>
-                </SectionReveal>
-              );
-            })}
           </div>
+        </SectionReveal>
+
+        {/* 3-column feature grid — Svarog "Why Choose Us" style */}
+        <div className="grid gap-5 sm:grid-cols-3">
+          {about.cards.map((card) => {
+            const Icon = card.icon;
+            return (
+              <SectionReveal key={card.title}>
+                <motion.div
+                  whileHover={{ y: -5 }}
+                  transition={{ duration: 0.22, ease: "easeOut" }}
+                  className={cn(
+                    "group flex h-full flex-col items-center rounded-2xl border border-border bg-card p-8 text-center",
+                    "transition-colors hover:border-foreground/20"
+                  )}
+                >
+                  <div className="mb-5 inline-flex size-12 items-center justify-center rounded-xl bg-[#161616] text-foreground ring-1 ring-border group-hover:ring-foreground/20">
+                    <Icon className="size-5" strokeWidth={1.75} />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    {card.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {card.description}
+                  </p>
+                </motion.div>
+              </SectionReveal>
+            );
+          })}
         </div>
       </div>
     </section>
