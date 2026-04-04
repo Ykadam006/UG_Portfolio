@@ -1,14 +1,11 @@
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
-import { About } from "@/components/sections/About";
-import { Contact } from "@/components/sections/Contact";
-import { Experience } from "@/components/sections/Experience";
-import { FAQ } from "@/components/sections/FAQ";
-import { Hero } from "@/components/sections/Hero";
-import { Leadership } from "@/components/sections/Leadership";
-import { Skills } from "@/components/sections/Skills";
-import { Testimonials } from "@/components/sections/Testimonials";
-import { Work } from "@/components/sections/Work";
+import { About } from "@/components/About";
+import { Achievements } from "@/components/Achievements";
+import { Contact } from "@/components/Contact";
+import { Experience } from "@/components/Experience";
+import { Hero } from "@/components/Hero";
+import { Navbar } from "@/components/Navbar";
+import { Projects } from "@/components/Projects";
+import { SkillTicker } from "@/components/SkillTicker";
 
 export default function Home() {
   return (
@@ -16,16 +13,13 @@ export default function Home() {
       <Navbar />
       <main>
         <Hero />
+        <SkillTicker />
         <About />
-        <Work />
         <Experience />
-        <Skills />
-        <Leadership />
-        <Testimonials />
-        <FAQ />
+        <Projects />
+        <Achievements />
         <Contact />
       </main>
-      <Footer />
     </>
   );
 }

@@ -1,28 +1,20 @@
 import type { Metadata } from "next";
-import { Inter, Manrope } from "next/font/google";
 
-import { site } from "@/data/portfolio";
+import { site } from "@/lib/data";
 
+import "@fontsource/dm-serif-display/400.css";
 import "./globals.css";
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const manrope = Manrope({
-  variable: "--font-manrope",
-  subsets: ["latin"],
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: `${site.name} — ${site.title}`,
-  description: site.title,
+  description: site.description,
+  ...(process.env.NEXT_PUBLIC_SITE_URL
+    ? { metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL) }
+    : {}),
   openGraph: {
     title: `${site.name} — ${site.title}`,
-    description: site.title,
+    description: site.description,
+    images: [{ url: site.ogImage }],
   },
 };
 
@@ -33,11 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${inter.variable} ${manrope.variable} min-h-screen bg-background font-sans antialiased`}
-      >
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
