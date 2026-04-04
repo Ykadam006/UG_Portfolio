@@ -26,9 +26,9 @@ export function Navbar() {
   const [open, setOpen] = useState(false);
   const { scrollY } = useScroll();
   const borderAlpha = useTransform(scrollY, [0, 50], [0, 1]);
-  const borderColor = useMotionTemplate`rgba(61, 61, 61, ${borderAlpha})`;
-  const bgAlpha = useTransform(scrollY, [0, 80], [0.42, 0.94]);
-  const bgColor = useMotionTemplate`rgba(13, 13, 13, ${bgAlpha})`;
+  const borderColor = useMotionTemplate`rgba(30, 28, 25, ${borderAlpha})`;
+  const bgAlpha = useTransform(scrollY, [0, 80], [0.0, 0.88]);
+  const bgColor = useMotionTemplate`rgba(8, 8, 8, ${bgAlpha})`;
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
