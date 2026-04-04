@@ -63,3 +63,58 @@
 .hero-orb {
   animation: orb-float 16s ease-in-out infinite;
 }
+
+@keyframes hero-wave-drift {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.hero-wave-track {
+  display: flex;
+  width: 200%;
+  will-change: transform;
+  animation: hero-wave-drift 22s linear infinite;
+}
+
+.hero-wave-track.is-reverse {
+  animation-direction: reverse;
+}
+
+.hero-wave-track.is-slow {
+  animation-duration: 40s;
+  opacity: 0.5;
+}
+
+.hero-wave-track.is-fast {
+  animation-duration: 15s;
+  opacity: 0.75;
+}
+
+@keyframes hero-wave-rise {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.hero-wave-bob-wrap {
+  animation: hero-wave-rise 11s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-wave-track {
+    animation: none;
+    transform: translate3d(-25%, 0, 0);
+  }
+
+  .hero-wave-bob-wrap {
+    animation: none;
+  }
+}

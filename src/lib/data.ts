@@ -1,5 +1,22 @@
 import type { LucideIcon } from "lucide-react";
-import { LineChart, Palette, Sparkles } from "lucide-react";
+import {
+  BarChart3,
+  BookOpen,
+  Cloud,
+  Database,
+  Image as ImageIcon,
+  Layers2,
+  LineChart,
+  Palette,
+  PenTool,
+  Sparkles,
+  Table2,
+} from "lucide-react";
+
+export type SkillTickerItem = {
+  label: string;
+  icon: LucideIcon;
+};
 
 export const site = {
   name: "Unnati Agrawal",
@@ -24,17 +41,17 @@ export const hero = {
   projectsHref: "#projects",
 };
 
-export const skillTickerItems = [
-  "Power BI",
-  "Excel",
-  "Canva",
-  "SQL",
-  "Figma",
-  "Photoshop",
-  "InDesign",
-  "Google Workspace",
-  "Illustrator",
-] as const;
+export const skillTickerItems: SkillTickerItem[] = [
+  { label: "Power BI", icon: BarChart3 },
+  { label: "Excel", icon: Table2 },
+  { label: "Canva", icon: Sparkles },
+  { label: "SQL", icon: Database },
+  { label: "Figma", icon: Layers2 },
+  { label: "Photoshop", icon: ImageIcon },
+  { label: "InDesign", icon: BookOpen },
+  { label: "Google Workspace", icon: Cloud },
+  { label: "Illustrator", icon: PenTool },
+];
 
 export const about = {
   bio:
