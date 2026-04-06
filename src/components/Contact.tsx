@@ -2,13 +2,23 @@
 
 import { motion } from "framer-motion";
 
+import { AuroraField } from "@/components/AuroraField";
 import { SectionReveal } from "@/components/SectionReveal";
 import { contact, site } from "@/lib/data";
 
 export function Contact() {
   return (
-    <section id="contact" className="scroll-mt-24 bg-background py-24 md:py-32">
-      <div className="mx-auto max-w-5xl px-5 md:px-8">
+    <section
+      id="contact"
+      className="relative scroll-mt-24 overflow-hidden bg-background py-24 md:py-32"
+    >
+      <AuroraField
+        vignette="section"
+        phaseClass="contact-aurora"
+        className="z-0"
+      />
+
+      <div className="relative z-10 mx-auto max-w-5xl px-5 md:px-8">
         <SectionReveal>
           <motion.div
             className="rounded-3xl border bg-card px-8 py-16 text-center md:px-16 md:py-20"
@@ -16,7 +26,6 @@ export function Contact() {
             whileHover={{ y: -2 }}
             transition={{ duration: 0.2 }}
           >
-            {/* Svarog mixed heading */}
             <h2 className="font-sans text-[2rem] font-bold leading-tight tracking-tight text-foreground md:text-[3.25rem]">
               Open to{" "}
               <em className="font-display not-italic italic">Opportunities</em>

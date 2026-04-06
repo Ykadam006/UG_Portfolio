@@ -1,3 +1,5 @@
+"use client";
+
 import {
   SiCanva,
   SiFigma,
@@ -5,6 +7,7 @@ import {
   SiMysql,
   SiNotion,
 } from "react-icons/si";
+
 
 /* ── Inline brand SVGs for tools react-icons doesn't cover ─────────────── */
 
