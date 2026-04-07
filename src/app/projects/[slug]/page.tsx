@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Download } from "lucide-react";
@@ -54,11 +55,43 @@ export default async function ProjectPage({ params }: Props) {
     <>
       <Navbar />
       <main className="min-h-screen bg-background">
-        <div className="border-b border-border/80 bg-gradient-to-b from-[#0f0d0a]/90 to-background">
-          <div className="mx-auto max-w-3xl px-5 pb-16 pt-28 md:max-w-4xl md:px-8 md:pb-20 md:pt-32">
+        <div className="relative overflow-hidden border-b border-border/80">
+          {project.caseHeroImage ? (
+            <>
+              <div className="absolute inset-0">
+                <Image
+                  src={project.caseHeroImage}
+                  alt={`${project.title} — hero background`}
+                  fill
+                  priority
+                  className="object-cover object-center"
+                  sizes="100vw"
+                />
+              </div>
+              <div
+                className="absolute inset-0 bg-gradient-to-b from-black/85 via-black/50 to-background"
+                aria-hidden
+              />
+              <div
+                className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-black/55"
+                aria-hidden
+              />
+            </>
+          ) : (
+            <div
+              className="absolute inset-0 bg-gradient-to-b from-[#0f0d0a]/90 to-background"
+              aria-hidden
+            />
+          )}
+
+          <div className="relative z-10 mx-auto max-w-3xl px-5 pb-16 pt-28 md:max-w-4xl md:px-8 md:pb-20 md:pt-32">
             <Link
               href="/#projects"
-              className="group inline-flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-accent"
+              className={`group inline-flex items-center gap-2 text-sm font-medium transition-colors hover:text-accent ${
+                project.caseHeroImage
+                  ? "text-white/70 hover:text-accent"
+                  : "text-muted-foreground"
+              }`}
             >
               <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-0.5" />
               All projects
@@ -67,20 +100,38 @@ export default async function ProjectPage({ params }: Props) {
             <p className="mt-10 text-[0.65rem] font-semibold tracking-[0.2em] text-accent uppercase">
               {project.tag}
             </p>
-            <h1 className="mt-4 font-display text-[2rem] font-normal leading-[1.12] tracking-tight text-foreground md:text-[2.75rem] md:leading-[1.08]">
+            <h1
+              className={`mt-4 font-display text-[2rem] font-normal leading-[1.12] tracking-tight md:text-[2.75rem] md:leading-[1.08] ${
+                project.caseHeroImage ? "text-white" : "text-foreground"
+              }`}
+            >
               {project.title}
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground md:text-lg">
+            <p
+              className={`mt-6 max-w-2xl text-base leading-relaxed md:text-lg ${
+                project.caseHeroImage ? "text-white/80" : "text-muted-foreground"
+              }`}
+            >
               {project.description}
             </p>
-            <p className="mt-5 max-w-2xl text-sm leading-relaxed text-muted-foreground/90">
+            <p
+              className={`mt-5 max-w-2xl text-sm leading-relaxed ${
+                project.caseHeroImage ? "text-white/65" : "text-muted-foreground/90"
+              }`}
+            >
               {project.detail}
             </p>
 
             <ul className="mt-8 flex flex-wrap gap-2">
               {project.tools.map((t) => (
                 <li key={t}>
-                  <span className="inline-flex rounded-full border border-border bg-card/60 px-3 py-1 text-xs font-medium text-muted-foreground">
+                  <span
+                    className={`inline-flex rounded-full border px-3 py-1 text-xs font-medium ${
+                      project.caseHeroImage
+                        ? "border-white/20 bg-black/35 text-white/85 backdrop-blur-sm"
+                        : "border-border bg-card/60 text-muted-foreground"
+                    }`}
+                  >
                     {t}
                   </span>
                 </li>

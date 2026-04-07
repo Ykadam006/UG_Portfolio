@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 
 import { site } from "@/lib/data";
 
@@ -15,15 +15,51 @@ function metadataBaseUrl() {
   return new URL("http://localhost:3000");
 }
 
+const defaultTitle = `${site.name} — ${site.title}`;
+
 export const metadata: Metadata = {
-  title: `${site.name} — ${site.title}`,
+  title: defaultTitle,
   description: site.description,
   metadataBase: metadataBaseUrl(),
-  openGraph: {
-    title: `${site.name} — ${site.title}`,
-    description: site.description,
-    images: [{ url: site.ogImage }],
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [{ url: "/logo-mark.svg", type: "image/svg+xml" }],
+    apple: [{ url: "/logo-mark.svg", type: "image/svg+xml" }],
+    shortcut: "/logo-mark.svg",
   },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    title: defaultTitle,
+    description: site.description,
+    siteName: site.name,
+    images: [
+      {
+        url: site.ogImage,
+        width: 1200,
+        height: 630,
+        alt: defaultTitle,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: defaultTitle,
+    description: site.description,
+    images: [site.ogImage],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#080808" },
+    { media: "(prefers-color-scheme: dark)", color: "#080808" },
+  ],
+  colorScheme: "dark",
 };
 
 export default function RootLayout({

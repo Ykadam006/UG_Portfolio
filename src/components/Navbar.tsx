@@ -55,7 +55,7 @@ export function Navbar() {
             href="/#hero"
             className="link-accent-underline font-display text-lg tracking-tight text-foreground transition-colors hover:text-foreground"
           >
-            {site.name}
+            <span className="leading-tight">{site.name}</span>
           </Link>
 
           <nav className="hidden items-center gap-9 md:flex">

@@ -1,6 +1,35 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
-  <rect width="1200" height="630" fill="#0D0D0D"/>
-  <text x="80" y="200" fill="#C9A84C" font-family="Georgia, serif" font-size="64">Unnati Agrawal</text>
-  <text x="80" y="280" fill="#F5F5F0" font-family="system-ui" font-size="36">Marketing &amp; Strategy, Backed by Data.</text>
-  <text x="80" y="360" fill="#888888" font-family="system-ui" font-size="28">Chicago · Illinois Institute of Technology</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" fill="none">
+  <rect width="1200" height="630" fill="#080808" />
+  <rect x="0" y="0" width="1200" height="3" fill="#c9a84c" opacity="0.35" />
+  <rect x="72" y="120" width="4" height="390" fill="#c9a84c" />
+  <text
+    x="120"
+    y="300"
+    fill="#fafafa"
+    font-family="Georgia, 'Times New Roman', serif"
+    font-size="68"
+    font-weight="400"
+  >
+    Unnati Agrawal
+  </text>
+  <text
+    x="120"
+    y="385"
+    fill="#c9a84c"
+    font-family="ui-sans-serif, system-ui, sans-serif"
+    font-size="28"
+    font-weight="600"
+    letter-spacing="0.18em"
+  >
+    MARKETING &amp; STRATEGY
+  </text>
+  <text
+    x="120"
+    y="455"
+    fill="#a3a3a3"
+    font-family="ui-sans-serif, system-ui, sans-serif"
+    font-size="22"
+  >
+    Illinois Institute of Technology · Chicago, IL
+  </text>
 </svg>

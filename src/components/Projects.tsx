@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 import { SectionReveal } from "@/components/SectionReveal";
@@ -37,29 +38,43 @@ function cardStyleForId(id: string) {
   return { bg: GRADIENTS[gi], accent: ACCENTS[ai] };
 }
 
+/** Last row has a single card (e.g. 7 → 3+3+1): center it in the 3-column grid. */
+function loneLastRowClass(index: number, total: number) {
+  const isLast = index === total - 1;
+  const loneInLastRow = total % 3 === 1;
+  if (!isLast || !loneInLastRow) return undefined;
+  return "lg:col-start-2";
+}
+
 export function Projects() {
+  const total = projects.length;
+
   return (
     <section
       id="projects"
       className="section-glow-line scroll-mt-24 bg-background py-24 md:py-32"
     >
-      <div className="mx-auto max-w-5xl px-5 md:px-8">
+      <div className="mx-auto max-w-6xl px-5 md:px-8">
         <SectionReveal>
           <div className="mb-16 text-center">
             <h2 className="font-sans text-[2.25rem] font-bold leading-tight tracking-tight text-foreground md:text-[3.5rem]">
               View{" "}
-              <em className="font-display not-italic italic">Our Projects</em>
+              <em className="font-display not-italic italic">My Projects</em>
             </h2>
             <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Each project opens to a full case study with an in-browser preview
-              (PDF or slides on your live site) and downloadable files.
+              Open any card for the full case study, preview, and downloads.
             </p>
           </div>
         </SectionReveal>
 
-        <StaggerChildren className="grid gap-5 md:grid-cols-2">
-          {projects.map((project) => (
-            <ProjectCard key={project.id} project={project} />
+        <StaggerChildren className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 lg:gap-6">
+          {projects.map((project, index) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              className={loneLastRowClass(index, total)}
+              imagePriority={index === 0 && Boolean(project.listCoverImage)}
+            />
           ))}
         </StaggerChildren>
       </div>
@@ -67,7 +82,15 @@ export function Projects() {
   );
 }
 
-function ProjectCard({ project }: { project: Project }) {
+function ProjectCard({
+  project,
+  className,
+  imagePriority,
+}: {
+  project: Project;
+  className?: string;
+  imagePriority?: boolean;
+}) {
   const { bg, accent } = cardStyleForId(project.id);
 
   return (
@@ -75,6 +98,7 @@ function ProjectCard({ project }: { project: Project }) {
       href={`/projects/${project.id}`}
       className={cn(
         "block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        className,
       )}
     >
       <motion.article
@@ -82,31 +106,54 @@ function ProjectCard({ project }: { project: Project }) {
         transition={{ duration: 0.25, ease: "easeOut" }}
         className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl border border-border"
       >
-        <div
-          className="absolute inset-0 transition-transform duration-500 group-hover:scale-105"
-          style={{ background: bg }}
-        />
+        <div className="absolute inset-0 overflow-hidden">
+          <div
+            className={cn(
+              "absolute inset-0 origin-center scale-100 grayscale transition-[filter,transform] duration-700 ease-out",
+              "group-hover:scale-[1.06] group-hover:grayscale-0",
+              "motion-reduce:grayscale-0 motion-reduce:transition-none motion-reduce:group-hover:scale-100",
+            )}
+          >
+            {project.listCoverImage ? (
+              <div className="absolute inset-0">
+                <Image
+                  src={project.listCoverImage}
+                  alt=""
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={Boolean(imagePriority)}
+                />
+              </div>
+            ) : (
+              <div className="absolute inset-0" style={{ background: bg }} />
+            )}
 
-        <svg
-          className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-300 group-hover:opacity-50"
-          viewBox="0 0 400 300"
-          preserveAspectRatio="xMidYMid slice"
-          aria-hidden
-        >
-          <line x1="0" y1="220" x2="400" y2="80" stroke={accent} strokeWidth="0.8" />
-          <line x1="0" y1="180" x2="400" y2="120" stroke={accent} strokeWidth="0.5" />
-          <line x1="60" y1="0" x2="120" y2="300" stroke={accent} strokeWidth="0.5" />
-          <line x1="160" y1="0" x2="200" y2="300" stroke={accent} strokeWidth="0.4" />
-          <line x1="280" y1="0" x2="320" y2="300" stroke={accent} strokeWidth="0.4" />
-          <circle cx="200" cy="150" r="60" fill="none" stroke={accent} strokeWidth="0.4" />
-          <circle cx="200" cy="150" r="90" fill="none" stroke={accent} strokeWidth="0.3" />
-        </svg>
+            {!project.listCoverImage && (
+              <svg
+                className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-500 ease-out group-hover:opacity-50"
+                viewBox="0 0 400 300"
+                preserveAspectRatio="xMidYMid slice"
+                aria-hidden
+              >
+                <line x1="0" y1="220" x2="400" y2="80" stroke={accent} strokeWidth="0.8" />
+                <line x1="0" y1="180" x2="400" y2="120" stroke={accent} strokeWidth="0.5" />
+                <line x1="60" y1="0" x2="120" y2="300" stroke={accent} strokeWidth="0.5" />
+                <line x1="160" y1="0" x2="200" y2="300" stroke={accent} strokeWidth="0.4" />
+                <line x1="280" y1="0" x2="320" y2="300" stroke={accent} strokeWidth="0.4" />
+                <circle cx="200" cy="150" r="60" fill="none" stroke={accent} strokeWidth="0.4" />
+                <circle cx="200" cy="150" r="90" fill="none" stroke={accent} strokeWidth="0.3" />
+              </svg>
+            )}
+          </div>
+        </div>
 
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
+            background: project.listCoverImage
+              ? "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.15) 100%)"
+              : "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
           }}
         />
 

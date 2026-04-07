@@ -28,6 +28,7 @@ export const site = {
   phone: "+1 (312) 371-2508",
   linkedInUrl: "https://www.linkedin.com/in/unnati-agrawal0229/",
   resumePath: "/resume.pdf",
+  /** Open Graph & Twitter card (`public/…`). */
   ogImage: "/og-image.svg",
 };
 
@@ -129,11 +130,17 @@ export type Project = {
   tools: string[];
   caseStudy: CaseStudySection[];
   assets: ProjectAsset[];
+  /** Optional hero image for the home-page project grid (`public/...` path). */
+  listCoverImage?: string;
+  /** Full-bleed hero background on the project case-study page (`public/...` path). */
+  caseHeroImage?: string;
 };
 
 export const projects: Project[] = [
   {
     id: "seiko-brand-strategy",
+    listCoverImage: "/images/project-seiko-brand-strategy.png",
+    caseHeroImage: "/images/project-seiko-case-hero.png",
     tag: "Brand Strategy",
     title: "SEIKO Luxury Watches — Brand Strategy",
     description:
@@ -172,6 +179,8 @@ export const projects: Project[] = [
   },
   {
     id: "bike-4-us-simulation",
+    listCoverImage: "/images/project-bike-4-us.png",
+    caseHeroImage: "/images/project-bike-4-us-case-hero.png",
     tag: "Strategy Simulation",
     title: "Bike-4-Us — Strategic Management Simulation",
     description:
@@ -210,33 +219,40 @@ export const projects: Project[] = [
   },
   {
     id: "foxcore-retail",
+    listCoverImage: "/images/project-foxcore-retail.png",
+    caseHeroImage: "/images/project-foxcore-case-hero.png",
     tag: "Retail Strategy",
     title: "Foxcore Retail — Analysis & Strategy",
     description:
-      "Retail case analysis with a written report and executive-style deck for stakeholders.",
+      "One retail case line: written analysis, executive strategy deck, and a companion Foxcare group presentation—aligned narrative across individual and team work.",
     detail:
-      "Paired quantitative and narrative analysis for a retail scenario—supporting recommendations with a formal report plus a slide narrative for discussion.",
-    tools: ["PowerPoint", "Written analysis", "Retail strategy"],
+      "Foxcore work pairs a formal analysis report with a stakeholder-ready slide storyline. The Foxcare group deck extends the same retail theme for class delivery: one coherent thread from evidence to recommendations, whether in PDF, solo PPTX, or a team-built presentation.",
+    tools: [
+      "PowerPoint",
+      "Written analysis",
+      "Retail strategy",
+      "Team collaboration",
+    ],
     caseStudy: [
       {
         heading: "Context",
         body:
-          "Retail strategy work for Foxcore—framing performance, customer dynamics, and operational levers relevant to growth or turnaround conversations.",
+          "Retail strategy for the Foxcore case—performance, customer dynamics, and operational levers—was developed alongside a related Foxcare group project. Both tracks share one retail storyline so analysis, executive messaging, and team presentation stay consistent.",
       },
       {
-        heading: "Approach",
+        heading: "Analysis & strategy deck (Foxcore)",
         body:
-          "Built the long-form analysis in the PDF and summarized the storyline for presentation: problem, evidence, options, and recommendation with clear logic.",
+          "The PDF captures the full diagnosis: problem framing, evidence, options, and recommendations. The Foxcore PPTX distills that logic for meetings—clear storyline, visual hierarchy, and proof points decision-makers can scan quickly.",
       },
       {
-        heading: "Outcomes",
+        heading: "Group presentation (Foxcare)",
         body:
-          "Two deliverables that serve different audiences—the deep dive (PDF) and the meeting-ready walkthrough (PPTX).",
+          "The Foxcare deck consolidates group research into a single class-ready narrative: situation, analysis, recommendation, and next steps—with agreed slide ownership and visuals so the team presents as one voice.",
       },
       {
-        heading: "Learnings",
+        heading: "Outcomes & learnings",
         body:
-          "One insight, two formats: analysts want depth; decision-makers often need the same rigor in fewer, sharper slides.",
+          "Three artifacts serve three moments: deep read (PDF), executive walkthrough (Foxcore slides), and live group delivery (Foxcare). The takeaway is that one retail thesis can scale across formats—if the master argument is fixed early, analysts, leads, and presenters all stay aligned.",
       },
     ],
     assets: [
@@ -244,49 +260,20 @@ export const projects: Project[] = [
         label: "Analysis report (PDF)",
         filename: "Group 1 Foxcore Retail Analysis Report.pdf",
       },
-      { label: "Strategy deck (PPTX)", filename: "Foxcore Retail.pptx" },
-    ],
-  },
-  {
-    id: "foxcare-retail",
-    tag: "Retail & Branding",
-    title: "Foxcare Retail — Group Presentation",
-    description:
-      "Team retail project distilled into a structured slide narrative for class delivery.",
-    detail:
-      "Group presentation covering the Foxcare retail storyline—positioning, recommendations, and supporting rationale in slide form.",
-    tools: ["PowerPoint", "Team collaboration", "Retail"],
-    caseStudy: [
       {
-        heading: "Context",
-        body:
-          "Coursework that required aligning a group on a single retail narrative and presenting with consistent messaging and visuals.",
+        label: "Strategy deck — Foxcore (PPTX)",
+        filename: "Foxcore Retail.pptx",
       },
       {
-        heading: "Approach",
-        body:
-          "Consolidated research and decisions into one deck with a clear flow: situation, analysis, recommendation, and next steps.",
-      },
-      {
-        heading: "Outcomes",
-        body:
-          "Delivered a cohesive group PPTX suitable for live presentation and peer review.",
-      },
-      {
-        heading: "Learnings",
-        body:
-          "Group decks succeed when roles, slide ownership, and the master storyline are agreed early—then design stays consistent.",
-      },
-    ],
-    assets: [
-      {
-        label: "Group presentation (PPTX)",
+        label: "Group presentation — Foxcare (PPTX)",
         filename: "Group1 Foxcare Retail Ppt.pptx",
       },
     ],
   },
   {
     id: "uber-mba511",
+    listCoverImage: "/images/project-uber-mba511.png",
+    caseHeroImage: "/images/project-uber-case-hero.png",
     tag: "MBA 511",
     title: "Uber — Strategy Presentation",
     description:
@@ -325,6 +312,8 @@ export const projects: Project[] = [
   },
   {
     id: "honeylu-mba511",
+    listCoverImage: "/images/project-honeylu-mba511.png",
+    caseHeroImage: "/images/project-honeylu-case-hero.png",
     tag: "MBA 511",
     title: "HoneyLu's — Case Presentation",
     description:
@@ -359,149 +348,92 @@ export const projects: Project[] = [
     ],
   },
   {
-    id: "mba513-team5",
+    id: "abc-plastic-manufacturer",
+    listCoverImage: "/images/project-mba513-team5.png",
+    caseHeroImage: "/images/project-mba513-team5-case-hero.png",
     tag: "MBA 513",
-    title: "MBA 513 — Team 5 Integrated Project",
+    title: "ABC Plastic Manufacturer — Case Presentation",
     description:
-      "Team-integrated project synthesizing course themes into one capstone-style presentation.",
+      "Integrated MBA 513 team case on a plastics manufacturing setting—slide narrative plus structured written Q&A supporting the same storyline.",
     detail:
-      "Team 5 deliverable for MBA 513—integrated analysis and recommendations presented as a single authoritative deck.",
-    tools: ["PowerPoint", "Integrated analysis", "Team delivery"],
+      "One case arc for ABC Plastic Manufacturer: a Team 5 presentation that synthesizes strategy, execution, and recommendations, paired with a question-and-answer document that answers prompts with direct, rubric-aligned responses. Together they show both meeting-ready storytelling and written rigor.",
+    tools: [
+      "PowerPoint",
+      "Word",
+      "Team collaboration",
+      "Integrated analysis",
+      "Manufacturing & strategy",
+    ],
     caseStudy: [
       {
         heading: "Context",
         body:
-          "MBA 513 often culminates in a team project that must integrate multiple modules—strategy, execution, and communication in one artifact.",
+          "The project centers on ABC Plastic Manufacturer as a manufacturing and strategy case—operations, market pressure, and choices leadership would debate in an MBA integrative course. Team 5 work had to align modules into a single narrative while coursework also required explicit Q&A responses tied to the same material.",
       },
       {
         heading: "Approach",
         body:
-          "Aligned the team on a shared outline, divided research and slide builds, then unified voice and visuals before submission.",
+          "Built the deck around a shared outline: research and slide ownership split across the team, then one voice and visual system for submission. The Word Q&A matched each prompt with a clear answer first, evidence second, and clean formatting so instructors could score completeness and logic quickly.",
       },
       {
         heading: "Outcomes",
         body:
-          "Final team PPTX representing consolidated thinking and presentation-ready polish.",
+          "Delivered an authoritative team PPTX for presentation and peer review, plus a DOCX Q&A artifact that maps to rubric expectations—two formats, one consistent case story for ABC Plastic Manufacturer.",
       },
       {
         heading: "Learnings",
         body:
-          "Integration is a design problem: the last mile is making disparate sections read as one argument, not separate appendices.",
+          "Slides and written prompts test different muscles; when they reference the same case, locking the master storyline early keeps the deck and the Q&A from drifting apart. Integration is as much editorial discipline as analysis.",
       },
     ],
     assets: [
       {
-        label: "Team 5 presentation (PPTX)",
+        label: "Case presentation — Team 5 (PPTX)",
         filename: "MBA 513 Team 5 ppt (1).pptx",
+      },
+      {
+        label: "Questions & responses (DOCX)",
+        filename: "Project Question Answer.docx",
       },
     ],
   },
   {
     id: "mba501-case",
+    listCoverImage: "/images/project-kimberly-clark.png",
+    caseHeroImage: "/images/project-kimberly-clark-case-hero.png",
     tag: "MBA 501",
-    title: "MBA 501 — Case Study Write-Up",
+    title: "Kimberly-Clark and the Consumer Products Industry",
     description:
-      "Structured written case analysis: situation, frameworks, and evidence-backed conclusions.",
+      "Written case analysis on Kimberly-Clark within consumer products—industry structure, financial evidence, and a defendable recommendation.",
     detail:
-      "Long-form case study document demonstrating analytical structure, clarity, and academic rigor in written form.",
-    tools: ["Word", "Case analysis", "Business writing"],
+      "MBA 501 case write-up framed around Kimberly-Clark and the consumer packaged goods landscape: clear problem definition, relevant frameworks, and argumentation tied to data and market context. Delivered as a polished Word document for academic review and as a writing sample.",
+    tools: ["Word", "Case analysis", "Business writing", "Industry research"],
     caseStudy: [
       {
         heading: "Context",
         body:
-          "MBA 501 emphasizes foundational case analysis—clear problem definition, relevant frameworks, and disciplined argumentation.",
+          "Consumer products is shaped by scale brands, retail power, and steady margin pressure. The brief was to situate Kimberly-Clark in that industry—competitive forces, performance signals, and the strategic question the case poses—before moving to diagnosis.",
       },
       {
         heading: "Approach",
         body:
-          "Organized the write-up to move from facts to diagnosis to options, with explicit assumptions and a reasoned recommendation.",
+          "Structured the document from facts to frameworks to options: explicit assumptions, evidence from the case and financials where applicable, and a single line of reasoning toward a recommendation leadership could debate in class.",
       },
       {
         heading: "Outcomes",
         body:
-          "A complete DOCX submission suitable for grading feedback and as a writing sample for analytical roles.",
+          "A complete DOCX submission aligned to MBA 501 rubric—clear sections, disciplined citations of case material, and takeaways that read as both academic and practitioner-ready.",
       },
       {
         heading: "Learnings",
         body:
-          "Written cases reward tight logic: every paragraph should earn its place by advancing the decision the reader needs to make.",
+          "Large cap consumer names reward analysis that connects brand and shelf reality to the numbers: tight logic in writing mirrors the clarity stakeholders expect in strategy and finance roles.",
       },
     ],
     assets: [
       {
-        label: "Case study document (DOCX)",
+        label: "Kimberly-Clark case write-up (DOCX)",
         filename: "MBA501 01 Case stusy (3).docx",
-      },
-    ],
-  },
-  {
-    id: "final-capstone",
-    tag: "Capstone",
-    title: "Final Project — Summary Document",
-    description:
-      "Capstone deliverable capturing scope, analysis, and conclusions in a single PDF.",
-    detail:
-      "Final project PDF—consolidated outcomes from an extended assignment or capstone module.",
-    tools: ["PDF", "Synthesis", "Academic delivery"],
-    caseStudy: [
-      {
-        heading: "Context",
-        body:
-          "Capstone work typically requires bundling weeks of analysis into one authoritative document reviewers can evaluate end-to-end.",
-      },
-      {
-        heading: "Approach",
-        body:
-          "Structured the PDF for scanability: executive framing up front, supporting sections behind it, and consistent formatting throughout.",
-      },
-      {
-        heading: "Outcomes",
-        body:
-          "A standalone final submission that documents the full arc of the project.",
-      },
-      {
-        heading: "Learnings",
-        body:
-          "Finals are communication tests: the best analysis still needs signposting so busy readers find the answer quickly.",
-      },
-    ],
-    assets: [{ label: "Final project (PDF)", filename: "Final Project.pdf" }],
-  },
-  {
-    id: "project-qna",
-    tag: "Coursework",
-    title: "Project — Questions & Responses",
-    description:
-      "Written responses to project prompts—clarity, structure, and direct answers.",
-    detail:
-      "Question-and-answer style coursework captured in a Word document for submission and feedback.",
-    tools: ["Word", "Structured responses", "Academic writing"],
-    caseStudy: [
-      {
-        heading: "Context",
-        body:
-          "Some modules assess understanding through explicit Q&A prompts rather than a single essay—precision and completeness matter.",
-      },
-      {
-        heading: "Approach",
-        body:
-          "Matched each prompt with a direct answer, supporting detail where required, and clean formatting for instructor review.",
-      },
-      {
-        heading: "Outcomes",
-        body:
-          "A DOCX artifact that maps cleanly to rubric expectations and demonstrates command of the material.",
-      },
-      {
-        heading: "Learnings",
-        body:
-          "Prompt-style assignments reward discipline: answer the question first, then add depth—never the reverse.",
-      },
-    ],
-    assets: [
-      {
-        label: "Q&A document (DOCX)",
-        filename: "Project Question Answer.docx",
       },
     ],
   },

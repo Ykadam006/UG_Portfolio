@@ -23,13 +23,15 @@ export function Footer() {
 
       <div className="relative z-10 mx-auto max-w-5xl px-5 py-14 md:px-8 md:py-16">
         <div className="flex flex-col items-center gap-8 text-center md:flex-row md:items-start md:justify-between md:text-left">
-          <div>
-            <p className="font-sans text-lg font-semibold tracking-tight text-foreground">
-              {site.name}
-            </p>
-            <p className="mt-1 max-w-xs text-sm text-muted-foreground">
-              {site.title} · {site.location}
-            </p>
+          <div className="flex flex-col items-center gap-3 md:items-start">
+            <div className="text-left">
+              <p className="font-sans text-lg font-semibold tracking-tight text-foreground">
+                {site.name}
+              </p>
+              <p className="mt-1 max-w-xs text-sm text-muted-foreground">
+                {site.title} · {site.location}
+              </p>
+            </div>
           </div>
 
           <nav
