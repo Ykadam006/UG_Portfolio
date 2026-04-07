@@ -14,12 +14,12 @@ import { site } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
 const links = [
-  { label: "Home", href: "#hero" },
-  { label: "About", href: "#about" },
-  { label: "Experience", href: "#experience" },
-  { label: "Projects", href: "#projects" },
-  { label: "Achievements", href: "#achievements" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/#hero" },
+  { label: "About", href: "/#about" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Achievements", href: "/#achievements" },
+  { label: "Contact", href: "/#contact" },
 ] as const;
 
 export function Navbar() {
@@ -51,8 +51,8 @@ export function Navbar() {
       >
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-5 md:px-8">
           <a
-            href="#hero"
-            className="font-display text-lg tracking-tight text-foreground"
+            href="/#hero"
+            className="link-accent-underline font-display text-lg tracking-tight text-foreground transition-colors hover:text-foreground"
           >
             {site.name}
           </a>
@@ -62,7 +62,7 @@ export function Navbar() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                className="link-accent-underline text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {l.label}
               </a>
@@ -71,14 +71,14 @@ export function Navbar() {
 
           <a
             href={site.resumePath}
-            className="hidden rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent md:inline-flex"
+            className="pressable hidden rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent md:inline-flex"
           >
             Resume
           </a>
 
           <button
             type="button"
-            className="inline-flex size-10 items-center justify-center rounded-full border border-border md:hidden"
+            className="pressable inline-flex size-10 items-center justify-center rounded-full border border-border md:hidden"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
           >
@@ -101,7 +101,7 @@ export function Navbar() {
                 <a
                   key={l.href}
                   href={l.href}
-                  className="rounded-lg px-2 py-2 text-sm font-medium text-foreground"
+                  className="link-accent-underline rounded-lg px-2 py-2 text-sm font-medium text-foreground"
                   onClick={() => setOpen(false)}
                 >
                   {l.label}
@@ -109,7 +109,7 @@ export function Navbar() {
               ))}
               <a
                 href={site.resumePath}
-                className="mt-2 rounded-full border border-border px-4 py-2 text-center text-sm font-semibold"
+                className="pressable mt-2 rounded-full border border-border px-4 py-2 text-center text-sm font-semibold"
                 onClick={() => setOpen(false)}
               >
                 Resume
