@@ -92,7 +92,7 @@ export function SkillTicker() {
   const items = [...skills, ...skills];
 
   return (
-    <div className="border-b border-border bg-[#060606] py-6">
+    <div className="section-glow-line relative bg-[#060606] py-6">
       <p className="mb-5 text-center text-[0.6rem] font-semibold tracking-[0.3em] text-muted-foreground uppercase">
         Skills &amp; Tools
       </p>

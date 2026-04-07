@@ -8,9 +8,12 @@ import { cn } from "@/lib/utils";
 export function SectionReveal({
   children,
   className,
+  delay = 0,
 }: {
   children: ReactNode;
   className?: string;
+  /** Stagger offset when multiple SectionReveals stack (seconds). */
+  delay?: number;
 }) {
   const reduceMotion = useReducedMotion();
 
@@ -23,7 +26,7 @@ export function SectionReveal({
       className={cn(className)}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 0.6, ease: "easeOut", delay }}
       viewport={{ once: true, margin: "-80px" }}
     >
       {children}

@@ -1,7 +1,13 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import Link from "next/link";
+import { useRef } from "react";
 
 import { FireWave } from "@/components/FireWave";
 import { hero, site } from "@/lib/data";
@@ -17,21 +23,29 @@ const item = {
 
 export function Hero() {
   const reduceMotion = useReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end start"],
+  });
+  const parallaxY = useTransform(scrollYProgress, [0, 1], [0, -42]);
+  const parallaxOpacity = useTransform(scrollYProgress, [0, 0.75, 1], [1, 1, 0.88]);
 
   return (
     <section
+      ref={sectionRef}
       id="hero"
-      className="relative min-h-screen overflow-hidden border-b border-border bg-background"
+      className="section-glow-line relative min-h-screen overflow-hidden bg-background"
     >
       <FireWave />
 
-      {/* Centered content */}
       <div className="relative z-10 mx-auto flex min-h-screen max-w-5xl flex-col items-center justify-center px-5 pb-32 pt-28 text-center md:px-8">
         {reduceMotion ? (
           <HeroContent />
         ) : (
           <motion.div
             className="flex flex-col items-center gap-7"
+            style={{ y: parallaxY, opacity: parallaxOpacity }}
             variants={container}
             initial="hidden"
             animate="show"
@@ -67,13 +81,13 @@ export function Hero() {
             >
               <Link
                 href={hero.resumeHref}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-foreground/20 bg-foreground px-8 text-sm font-semibold text-background transition-all hover:-translate-y-0.5 hover:bg-foreground/90"
+                className="pressable inline-flex h-12 items-center justify-center rounded-full border border-foreground/20 bg-foreground px-8 text-sm font-semibold text-background transition-all hover:-translate-y-0.5 hover:bg-foreground/90"
               >
                 {hero.resumeLabel}
               </Link>
               <a
                 href={hero.projectsHref}
-                className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm font-semibold text-foreground/80 backdrop-blur-sm transition-all hover:border-foreground/30 hover:text-foreground"
+                className="pressable inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm font-semibold text-foreground/80 backdrop-blur-sm transition-all hover:border-foreground/30 hover:text-foreground"
               >
                 {hero.projectsLabel}
               </a>
@@ -81,7 +95,7 @@ export function Hero() {
                 href={site.linkedInUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm font-semibold text-muted-foreground backdrop-blur-sm transition-all hover:text-foreground"
+                className="pressable inline-flex h-12 items-center justify-center rounded-full border border-border px-8 text-sm font-semibold text-muted-foreground backdrop-blur-sm transition-all hover:text-foreground"
               >
                 LinkedIn ↗
               </a>

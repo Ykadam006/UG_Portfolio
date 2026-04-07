@@ -14,7 +14,7 @@ export function Experience() {
   return (
     <section
       id="experience"
-      className="scroll-mt-24 border-b border-border bg-[#070707] py-24 md:py-32"
+      className="section-glow-line scroll-mt-24 bg-[#070707] py-24 md:py-32"
     >
       <div className="mx-auto max-w-5xl px-5 md:px-8">
         {/* Svarog centered heading */}
@@ -32,12 +32,13 @@ export function Experience() {
         </SectionReveal>
 
         <div className="space-y-4">
-          {experiences.map((entry) => (
+          {experiences.map((entry, index) => (
             <TimelineRow
               key={entry.id}
               entry={entry}
               open={openId === entry.id}
               onToggle={() => toggle(entry.id)}
+              revealDelay={index * 0.09}
             />
           ))}
         </div>
@@ -50,21 +51,23 @@ function TimelineRow({
   entry,
   open,
   onToggle,
+  revealDelay,
 }: {
   entry: ExperienceEntry;
   open: boolean;
   onToggle: () => void;
+  revealDelay?: number;
 }) {
   return (
-    <SectionReveal>
+    <SectionReveal delay={revealDelay}>
       <motion.div
         layout
-        className="overflow-hidden rounded-2xl border border-border bg-card"
+        className="card-texture overflow-hidden rounded-2xl border border-border bg-card"
       >
         <button
           type="button"
           onClick={onToggle}
-          className="flex w-full items-start justify-between gap-6 px-6 py-6 text-left transition-colors hover:bg-hover-card md:items-center md:px-8 md:py-7"
+          className="group relative z-[1] flex w-full items-start justify-between gap-6 px-6 py-6 text-left transition-colors hover:bg-hover-card md:items-center md:px-8 md:py-7"
         >
           <div className="flex items-start gap-4 md:items-center">
             <span className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full border border-border bg-[#161616] text-xs font-bold text-accent md:mt-0">
@@ -83,7 +86,7 @@ function TimelineRow({
             </div>
           </div>
           <motion.span
-            className="shrink-0"
+            className="shrink-0 transition-transform duration-300 group-hover:translate-x-0.5"
             animate={{ rotate: open ? 180 : 0 }}
             transition={{ duration: 0.25 }}
           >
@@ -98,7 +101,7 @@ function TimelineRow({
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.32, ease: "easeInOut" }}
-              className="overflow-hidden border-t border-border"
+              className="relative z-[1] overflow-hidden border-t border-border"
             >
               <ul className="space-y-3 px-6 py-5 text-sm leading-relaxed text-muted-foreground md:px-8 md:py-6">
                 {entry.bullets.map((b) => (

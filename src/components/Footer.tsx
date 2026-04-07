@@ -17,7 +17,7 @@ export function Footer() {
       id="footer"
       className="relative mt-0 min-h-[16rem] overflow-hidden border-t border-border bg-[#060606]"
     >
-      <div className="footer-aurora pointer-events-none absolute inset-0 z-0">
+      <div className="footer-aurora footer-wind-aurora pointer-events-none absolute inset-0 z-0">
         <AuroraField vignette="footer" />
       </div>
 
@@ -40,7 +40,7 @@ export function Footer() {
               <a
                 key={l.href}
                 href={l.href}
-                className="text-muted-foreground transition-colors hover:text-foreground"
+                className="link-accent-underline text-muted-foreground transition-colors hover:text-foreground"
               >
                 {l.label}
               </a>
@@ -49,19 +49,19 @@ export function Footer() {
               href={site.linkedInUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="link-accent-underline text-muted-foreground transition-colors hover:text-foreground"
             >
               LinkedIn
             </a>
             <a
               href={`mailto:${site.email}`}
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="link-accent-underline text-muted-foreground transition-colors hover:text-foreground"
             >
               Email
             </a>
             <Link
               href={site.resumePath}
-              className="text-muted-foreground transition-colors hover:text-foreground"
+              className="link-accent-underline text-muted-foreground transition-colors hover:text-foreground"
             >
               Resume
             </Link>
@@ -74,7 +74,7 @@ export function Footer() {
           </p>
           <a
             href="#hero"
-            className="transition-colors hover:text-accent"
+            className="link-accent-underline pressable inline-block transition-colors hover:text-accent"
           >
             Back to top ↑
           </a>
