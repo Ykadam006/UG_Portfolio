@@ -8,6 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Menu, X } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 import { site } from "@/lib/data";
@@ -50,31 +51,31 @@ export function Navbar() {
         }}
       >
         <div className="mx-auto flex h-full max-w-6xl items-center justify-between px-5 md:px-8">
-          <a
+          <Link
             href="/#hero"
             className="link-accent-underline font-display text-lg tracking-tight text-foreground transition-colors hover:text-foreground"
           >
             {site.name}
-          </a>
+          </Link>
 
           <nav className="hidden items-center gap-9 md:flex">
             {links.map((l) => (
-              <a
+              <Link
                 key={l.href}
                 href={l.href}
                 className="link-accent-underline text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
               >
                 {l.label}
-              </a>
+              </Link>
             ))}
           </nav>
 
-          <a
+          <Link
             href={site.resumePath}
             className="pressable hidden rounded-full border border-border px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-accent hover:text-accent md:inline-flex"
           >
             Resume
-          </a>
+          </Link>
 
           <button
             type="button"
@@ -98,22 +99,22 @@ export function Navbar() {
           >
             <div className="flex flex-col gap-1 pt-2">
               {links.map((l) => (
-                <a
+                <Link
                   key={l.href}
                   href={l.href}
                   className="link-accent-underline rounded-lg px-2 py-2 text-sm font-medium text-foreground"
                   onClick={() => setOpen(false)}
                 >
                   {l.label}
-                </a>
+                </Link>
               ))}
-              <a
+              <Link
                 href={site.resumePath}
                 className="pressable mt-2 rounded-full border border-border px-4 py-2 text-center text-sm font-semibold"
                 onClick={() => setOpen(false)}
               >
                 Resume
-              </a>
+              </Link>
             </div>
           </motion.div>
         ) : null}
