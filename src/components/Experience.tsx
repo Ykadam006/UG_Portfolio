@@ -1,49 +1,66 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Palette, Sparkles } from "lucide-react";
 import { useState } from "react";
 
+import { DesignsGallery } from "@/components/DesignsGallery";
 import { SectionReveal } from "@/components/SectionReveal";
 import { type ExperienceEntry, experiences } from "@/lib/data";
 
 export function Experience() {
   const [openId, setOpenId] = useState<string | null>(null);
+  const [galleryEntry, setGalleryEntry] = useState<ExperienceEntry | null>(null);
   const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
 
   return (
-    <section
-      id="experience"
-      className="section-glow-line scroll-mt-24 bg-[#070707] py-24 md:py-32"
-    >
-      <div className="mx-auto max-w-5xl px-5 md:px-8">
-        {/* Svarog centered heading */}
-        <SectionReveal>
-          <div className="mb-16 text-center">
-            <h2 className="font-sans text-[2.25rem] font-bold leading-tight tracking-tight text-foreground md:text-[3.5rem]">
-              Where I Build{" "}
-              <em className="font-display not-italic italic">Campaigns</em>
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
-              Driving student engagement, brand visibility, and data-backed
-              communications at Illinois Tech.
-            </p>
-          </div>
-        </SectionReveal>
+    <>
+      <section
+        id="experience"
+        className="section-glow-line scroll-mt-24 bg-[#070707] py-24 md:py-32"
+      >
+        <div className="mx-auto max-w-5xl px-5 md:px-8">
+          <SectionReveal>
+            <div className="mb-16 text-center">
+              <h2 className="font-sans text-[2.25rem] font-bold leading-tight tracking-tight text-foreground md:text-[3.5rem]">
+                Where I Build{" "}
+                <em className="font-display not-italic italic">Campaigns</em>
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-muted-foreground">
+                Driving student engagement, brand visibility, and data-backed
+                communications at Illinois Tech.
+              </p>
+            </div>
+          </SectionReveal>
 
-        <div className="space-y-4">
-          {experiences.map((entry, index) => (
-            <TimelineRow
-              key={entry.id}
-              entry={entry}
-              open={openId === entry.id}
-              onToggle={() => toggle(entry.id)}
-              revealDelay={index * 0.09}
-            />
-          ))}
+          <div className="space-y-4">
+            {experiences.map((entry, index) => (
+              <TimelineRow
+                key={entry.id}
+                entry={entry}
+                open={openId === entry.id}
+                onToggle={() => toggle(entry.id)}
+                revealDelay={index * 0.09}
+                onShowDesigns={
+                  entry.designs?.length
+                    ? () => setGalleryEntry(entry)
+                    : undefined
+                }
+              />
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+
+      <AnimatePresence>
+        {galleryEntry?.designs && (
+          <DesignsGallery
+            designs={galleryEntry.designs}
+            onClose={() => setGalleryEntry(null)}
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
@@ -52,11 +69,13 @@ function TimelineRow({
   open,
   onToggle,
   revealDelay,
+  onShowDesigns,
 }: {
   entry: ExperienceEntry;
   open: boolean;
   onToggle: () => void;
   revealDelay?: number;
+  onShowDesigns?: () => void;
 }) {
   return (
     <SectionReveal delay={revealDelay}>
@@ -103,14 +122,45 @@ function TimelineRow({
               transition={{ duration: 0.32, ease: "easeInOut" }}
               className="relative z-[1] overflow-hidden border-t border-border"
             >
-              <ul className="space-y-3 px-6 py-5 text-sm leading-relaxed text-muted-foreground md:px-8 md:py-6">
-                {entry.bullets.map((b) => (
-                  <li key={b} className="flex gap-3">
-                    <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent/70" />
-                    <span>{b}</span>
-                  </li>
-                ))}
-              </ul>
+              <div className="px-6 py-5 md:px-8 md:py-6">
+                {/* Bullet points */}
+                <ul className="space-y-3 text-sm leading-relaxed text-muted-foreground">
+                  {entry.bullets.map((b) => (
+                    <li key={b} className="flex gap-3">
+                      <span className="mt-2 size-1.5 shrink-0 rounded-full bg-accent/70" />
+                      <span>{b}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Show Designs CTA */}
+                {onShowDesigns && (
+                  <div className="mt-6 border-t border-border/40 pt-5">
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <div>
+                        <p className="text-[0.65rem] font-semibold tracking-widest text-muted-foreground uppercase">
+                          Creative Work
+                        </p>
+                        <p className="mt-0.5 text-sm text-muted-foreground">
+                          Event flyers, social posts &amp; promotional content I&apos;ve designed
+                        </p>
+                      </div>
+                      <motion.button
+                        type="button"
+                        onClick={(e) => { e.stopPropagation(); onShowDesigns(); }}
+                        whileHover={{ scale: 1.04, y: -1 }}
+                        whileTap={{ scale: 0.96 }}
+                        transition={{ duration: 0.18 }}
+                        className="group inline-flex shrink-0 items-center gap-2.5 rounded-full border border-accent/25 bg-accent/[0.07] px-5 py-2.5 text-sm font-semibold text-accent transition-all hover:border-accent/50 hover:bg-accent/[0.13]"
+                      >
+                        <Palette className="size-4 transition-transform duration-300 group-hover:rotate-12" />
+                        View My Designs
+                        <Sparkles className="size-3.5 opacity-60" />
+                      </motion.button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
