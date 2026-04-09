@@ -382,6 +382,91 @@
   background-size: 110px 110px;
 }
 
+/* ── Float ────────────────────────────────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-7px); }
+}
+.animate-float { animation: float 3.2s ease-in-out infinite; }
+
+/* ── Shimmer (button/card sweep) ──────────────────────────────────────────── */
+@keyframes shimmer {
+  from { background-position: -220% center; }
+  to   { background-position:  220% center; }
+}
+.animate-shimmer {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,255,255,0.10) 50%,
+    transparent 100%
+  );
+  background-size: 220% auto;
+  animation: shimmer 2.4s linear infinite;
+}
+
+/* ── Scroll indicator bounce ──────────────────────────────────────────────── */
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.45; }
+  50%       { transform: translateY(9px); opacity: 1; }
+}
+.animate-scroll-bounce { animation: scroll-bounce 1.9s ease-in-out infinite; }
+
+/* ── Spotlight card (cursor-follow radial glow) ───────────────────────────── */
+/*   Set --sx / --sy from JS with style.setProperty              */
+.spotlight-card {
+  position: relative;
+  isolation: isolate;
+}
+.spotlight-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at var(--sx, 50%) var(--sy, 50%),
+    rgba(201, 168, 76, 0.10) 0%,
+    transparent 58%
+  );
+  opacity: 0;
+  transition: opacity 0.32s ease;
+  pointer-events: none;
+  z-index: 1;
+}
+.spotlight-card:hover::after { opacity: 1; }
+
+/* ── Glow-border hover ────────────────────────────────────────────────────── */
+.glow-border-hover {
+  transition: box-shadow 0.3s ease, border-color 0.35s ease;
+}
+.glow-border-hover:hover {
+  box-shadow: 0 0 0 1px rgba(201,168,76,0.14),
+              0 8px 36px rgba(201,168,76,0.07),
+              0 2px 12px rgba(0,0,0,0.4);
+  border-color: rgba(201,168,76,0.22) !important;
+}
+
+/* ── Count-up flicker (while counting) ───────────────────────────────────── */
+@keyframes count-flicker {
+  0%, 100% { opacity: 1; }
+  48%       { opacity: 0.82; }
+}
+
+/* ── Gradient text ────────────────────────────────────────────────────────── */
+.text-gradient-gold {
+  background: linear-gradient(135deg, #e8c96a 0%, #c9a84c 45%, #f0d98a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Hero stat badge pulse ────────────────────────────────────────────────── */
+@keyframes badge-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(201,168,76,0); }
+  50%       { box-shadow: 0 0 0 6px rgba(201,168,76,0.08); }
+}
+.animate-badge-pulse { animation: badge-pulse 2.8s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   body::after { animation: none; }
   .aurora-base, .aurora-ribbon-a, .aurora-ribbon-b,
@@ -391,4 +476,6 @@
   .pressable { transition: none; }
   .pressable:active { transform: none; }
   .link-accent-underline::after { transition: none; }
+  .animate-float, .animate-shimmer, .animate-scroll-bounce,
+  .animate-badge-pulse { animation: none; }
 }

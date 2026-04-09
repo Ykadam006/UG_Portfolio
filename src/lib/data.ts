@@ -79,6 +79,12 @@ export const about = {
   ] as const,
 };
 
+export type DesignItem = {
+  title: string;
+  category: string;
+  src: string;
+};
+
 export type ExperienceEntry = {
   id: string;
   role: string;
@@ -87,6 +93,7 @@ export type ExperienceEntry = {
   dates: string;
   monogram: string;
   bullets: string[];
+  designs?: DesignItem[];
 };
 
 export const experiences: ExperienceEntry[] = [
@@ -102,6 +109,16 @@ export const experiences: ExperienceEntry[] = [
       "Create marketing content for Stuart events using Canva, Photoshop, and InDesign—supporting recruitment and business development presentations.",
       "Manage student activity pages; use data-informed posting to improve participation, awareness, and stakeholder engagement.",
       "Support graduate pre-term and orientation: onboarding communications in Google Slides, aligned resources, and event logistics for smoother attendance.",
+    ],
+    designs: [
+      { title: "Fall Networking Night — Event Flyer", category: "Event Flyer", src: "/designs/design-1.png" },
+      { title: "Graduate Orientation Welcome Post", category: "Social Media", src: "/designs/design-2.png" },
+      { title: "Stuart MBA Info Session Banner", category: "Event Banner", src: "/designs/design-3.png" },
+      { title: "Campus Groups Newsletter Header", category: "Email Header", src: "/designs/design-4.png" },
+      { title: "Toastmasters Weekly Meeting Promo", category: "Social Media", src: "/designs/design-5.png" },
+      { title: "PME Club Recruitment Flyer", category: "Event Flyer", src: "/designs/design-6.png" },
+      { title: "Business Development Presentation Cover", category: "Presentation", src: "/designs/design-7.png" },
+      { title: "Stuart School Brand Asset — Spring", category: "Brand Asset", src: "/designs/design-8.png" },
     ],
   },
 ];

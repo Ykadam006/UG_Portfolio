@@ -1,9 +1,11 @@
 "use client";
 
+import { animated, useSpring } from "@react-spring/web";
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import type { MouseEvent } from "react";
 
 import { SectionReveal } from "@/components/SectionReveal";
 import { StaggerChildren } from "@/components/StaggerChildren";
@@ -33,12 +35,9 @@ function cardStyleForId(id: string) {
   for (let i = 0; i < id.length; i++) {
     n = (n + id.charCodeAt(i) * (i + 1)) % 100000;
   }
-  const gi = n % GRADIENTS.length;
-  const ai = n % ACCENTS.length;
-  return { bg: GRADIENTS[gi], accent: ACCENTS[ai] };
+  return { bg: GRADIENTS[n % GRADIENTS.length], accent: ACCENTS[n % ACCENTS.length] };
 }
 
-/** Last row has a single card (e.g. 7 → 3+3+1): center it in the 3-column grid. */
 function loneLastRowClass(index: number, total: number) {
   const isLast = index === total - 1;
   const loneInLastRow = total % 3 === 1;
@@ -82,6 +81,7 @@ export function Projects() {
   );
 }
 
+/* ─── React Spring card tilt ─────────────────────────────────────────────── */
 function ProjectCard({
   project,
   className,
@@ -93,6 +93,27 @@ function ProjectCard({
 }) {
   const { bg, accent } = cardStyleForId(project.id);
 
+  /**
+   * React Spring physics — mass/tension/friction give a natural bounce that
+   * Framer Motion's duration-based springs can't match. The card settles with
+   * a gentle overshoot then damps back to flat.
+   */
+  const [spring, api] = useSpring(() => ({
+    xys: [0, 0, 1] as [number, number, number],
+    config: { mass: 1, tension: 260, friction: 22 },
+  }));
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const x = e.clientX - rect.left - cx;
+    const y = e.clientY - rect.top - cy;
+    api.start({ xys: [-(y / cy) * 7, (x / cx) * 7, 1.025] });
+  };
+
+  const handleMouseLeave = () => api.start({ xys: [0, 0, 1] });
+
   return (
     <Link
       href={`/projects/${project.id}`}
@@ -100,12 +121,21 @@ function ProjectCard({
         "block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,
       )}
+      style={{ perspective: 900 }}
     >
-      <motion.article
-        whileHover={{ scale: 1.015 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
+      <animated.div
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         className="group relative aspect-[4/3] cursor-pointer overflow-hidden rounded-2xl border border-border"
+        style={{
+          transform: spring.xys.to(
+            (x, y, s) =>
+              `perspective(900px) rotateX(${x}deg) rotateY(${y}deg) scale(${s})`,
+          ),
+          willChange: "transform",
+        }}
       >
+        {/* Image / gradient bg */}
         <div className="absolute inset-0 overflow-hidden">
           <div
             className={cn(
@@ -131,7 +161,7 @@ function ProjectCard({
 
             {!project.listCoverImage && (
               <svg
-                className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-500 ease-out group-hover:opacity-50"
+                className="absolute inset-0 h-full w-full opacity-30 transition-opacity duration-500 group-hover:opacity-50"
                 viewBox="0 0 400 300"
                 preserveAspectRatio="xMidYMid slice"
                 aria-hidden
@@ -148,15 +178,24 @@ function ProjectCard({
           </div>
         </div>
 
+        {/* Overlay */}
         <div
           className="absolute inset-0"
           style={{
             background: project.listCoverImage
-              ? "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.15) 100%)"
+              ? "linear-gradient(to top, rgba(0,0,0,0.92) 0%, rgba(0,0,0,0.45) 45%, rgba(0,0,0,0.10) 100%)"
               : "linear-gradient(to top, rgba(0,0,0,0.88) 0%, rgba(0,0,0,0.3) 50%, transparent 100%)",
           }}
         />
 
+        {/* Gold edge glow on hover */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          style={{ boxShadow: "inset 0 0 0 1px rgba(201,168,76,0.2)" }}
+        />
+
+        {/* Content */}
         <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between p-6 md:p-7">
           <div className="min-w-0 pr-2">
             <p className="text-xs font-medium text-white/50">{project.tag}</p>
@@ -167,11 +206,16 @@ function ProjectCard({
               {project.description}
             </p>
           </div>
-          <div className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-all group-hover:border-white/50 group-hover:bg-white/10">
-            <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </div>
+          {/* Arrow — Framer Motion used only for the icon micro-animation */}
+          <motion.div
+            whileHover={{ x: 1.5, y: -1.5 }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="flex size-9 shrink-0 items-center justify-center rounded-full border border-white/20 text-white transition-colors group-hover:border-accent/60 group-hover:bg-accent/10"
+          >
+            <ArrowUpRight className="size-4" />
+          </motion.div>
         </div>
-      </motion.article>
+      </animated.div>
     </Link>
   );
 }

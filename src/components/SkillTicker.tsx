@@ -96,12 +96,12 @@ export function SkillTicker() {
       <p className="mb-5 text-center text-[0.6rem] font-semibold tracking-[0.3em] text-muted-foreground uppercase">
         Skills &amp; Tools
       </p>
-      <div className="relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
-        <div className="flex w-max animate-marquee items-center gap-10 pr-10">
+      <div className="group relative overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_8%,black_92%,transparent)]">
+        <div className="flex w-max animate-marquee items-center gap-10 pr-10 group-hover:[animation-play-state:paused]">
           {items.map((skill, i) => (
             <span
               key={`${skill.label}-${i}`}
-              className="flex shrink-0 items-center gap-2.5 whitespace-nowrap"
+              className="flex shrink-0 items-center gap-2.5 whitespace-nowrap transition-opacity duration-300 hover:opacity-100 group-hover:opacity-60 hover:!opacity-100"
             >
               <skill.Icon
                 className="size-[18px] shrink-0"
