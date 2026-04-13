@@ -27,6 +27,26 @@ const nextConfig: NextConfig = {
         destination: "/projects/abc-plastic-manufacturer",
         permanent: true,
       },
+      {
+        source: "/images/project-seiko-brand-strategy.png",
+        destination: "/images/project-watch-luxury-brand-grid.png",
+        permanent: true,
+      },
+      {
+        source: "/images/project-seiko-case-hero.png",
+        destination: "/images/project-watch-luxury-case-hero.png",
+        permanent: true,
+      },
+      {
+        source: "/images/project-seiko-case-study-hero.png",
+        destination: "/images/project-watch-luxury-case-study-hero.png",
+        permanent: true,
+      },
+      {
+        source: "/projects/seiko-luxury-watches-hero.png",
+        destination: "/projects/luxury-watch-brand-presentation-hero.png",
+        permanent: true,
+      },
     ];
   },
 };

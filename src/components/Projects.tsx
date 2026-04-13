@@ -114,6 +114,7 @@ function ProjectCard({
   return (
     <Link
       href={`/projects/${project.id}`}
+      prefetch={false}
       className={cn(
         "block rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         className,

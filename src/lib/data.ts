@@ -252,8 +252,8 @@ export type Project = {
 export const projects: Project[] = [
   {
     id: "seiko-brand-strategy",
-    listCoverImage: "/images/project-seiko-brand-strategy.png",
-    caseHeroImage: "/images/project-seiko-case-hero.png",
+    listCoverImage: "/images/project-watch-luxury-brand-grid.png",
+    caseHeroImage: "/images/project-watch-luxury-case-hero.png",
     tag: "Brand Strategy",
     title: "SEIKO Luxury Watches — Brand Strategy",
     description:
