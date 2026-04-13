@@ -33,20 +33,12 @@ export const metadata: Metadata = {
     title: defaultTitle,
     description: site.description,
     siteName: site.name,
-    images: [
-      {
-        url: site.ogImage,
-        width: 1200,
-        height: 630,
-        alt: defaultTitle,
-      },
-    ],
+    /** Preview image: `opengraph-image.tsx` (PNG) — LinkedIn/WhatsApp ignore SVG. */
   },
   twitter: {
     card: "summary_large_image",
     title: defaultTitle,
     description: site.description,
-    images: [site.ogImage],
   },
   robots: {
     index: true,

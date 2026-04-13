@@ -28,8 +28,6 @@ export const site = {
   phone: "+1 (312) 371-2508",
   linkedInUrl: "https://www.linkedin.com/in/unnati-agrawal0229/",
   resumePath: "/resume.pdf",
-  /** Open Graph & Twitter card (`public/…`). */
-  ogImage: "/og-image.svg",
 };
 
 export const hero = {
