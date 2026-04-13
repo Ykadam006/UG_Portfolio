@@ -2,12 +2,16 @@
 
 import { cn } from "@/lib/utils";
 
+type FireWaveProps = {
+  className?: string;
+  /** Blend color for top/bottom fades (defaults to `var(--bg)`). Use section bg when nesting in tinted areas. */
+  fadeTo?: string;
+};
+
 /**
- * Aurora-borealis flowing background — hero only.
- * Curtain-of-light ribbons that skew, morph and drift like real aurora.
- * Parent must be `relative overflow-hidden`.
+ * Aurora-borealis flowing background — hero, cards, or any `relative overflow-hidden` parent.
  */
-export function FireWave({ className }: { className?: string }) {
+export function FireWave({ className, fadeTo = "var(--bg)" }: FireWaveProps) {
   return (
     <div
       aria-hidden
@@ -131,14 +135,14 @@ export function FireWave({ className }: { className?: string }) {
       <div
         className="absolute inset-x-0 top-0 h-[30%]"
         style={{
-          background: "linear-gradient(to bottom, var(--bg) 0%, transparent 100%)",
+          background: `linear-gradient(to bottom, ${fadeTo} 0%, transparent 100%)`,
         }}
       />
       {/* ── Bottom fade ──────────────────────────────────────────────── */}
       <div
         className="absolute inset-x-0 bottom-0 h-[30%]"
         style={{
-          background: "linear-gradient(to top, var(--bg) 0%, transparent 100%)",
+          background: `linear-gradient(to top, ${fadeTo} 0%, transparent 100%)`,
         }}
       />
     </div>

@@ -85,6 +85,119 @@ export type DesignItem = {
   src: string;
 };
 
+/** URL for files in `public/Design/` (encode spaces & special characters). */
+export function publicDesignHref(filename: string): string {
+  return `/Design/${encodeURIComponent(filename)}`;
+}
+
+/** All creative files in `public/Design/` for Stuart School experience gallery. */
+const stuartDesignFiles: { file: string; title: string; category: string }[] = [
+  {
+    file: "UNLOCK YOUR VOICE.png",
+    title: "UNLOCK YOUR VOICE — campaign key visual",
+    category: "Campaign",
+  },
+  {
+    file: "ARE YOU READY TO SPEAK WITH CONFIDENCE (2).png",
+    title: "Are you ready to speak with confidence — chapter promo",
+    category: "Campaign",
+  },
+  {
+    file: "1.png 2.png 3.png 4.png 5.png 6.png",
+    title: "Multi-format campaign set (composite)",
+    category: "Campaign",
+  },
+  {
+    file:
+      "February 13, 2026 Meeting Theme Celebrating Connection President Lyzzette Torres Rodriguez VP Education Muhit Newaz VP Membership Nithin Shankar VP Public Relations Unnati Agrawal Secretary Shaill (4).png",
+    title: "Meeting theme — celebrating connection (officer slate)",
+    category: "Chapter & meeting",
+  },
+  {
+    file: "IMG_0163.png",
+    title: "Stuart marketing visual — 01",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_0428.png",
+    title: "Stuart marketing visual — 02",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_1282.png",
+    title: "Stuart marketing visual — 03",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_3278.png",
+    title: "Stuart marketing visual — 04",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_3575.png",
+    title: "Stuart marketing visual — 05",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_4546.png",
+    title: "Stuart marketing visual — 06",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_5399.png",
+    title: "Stuart marketing visual — 07",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_6260.png",
+    title: "Stuart marketing visual — 08",
+    category: "Marketing visual",
+  },
+  {
+    file: "IMG_8938.png",
+    title: "Stuart marketing visual — 09",
+    category: "Marketing visual",
+  },
+  {
+    file: "Purple and White Simple Page Border Double-Sided Poster A3 Landscape (1).png",
+    title: "A3 landscape poster — bordered layout system",
+    category: "Print & layout",
+  },
+  {
+    file: "Your paragraph text (1).png",
+    title: "Layout & typographic treatment",
+    category: "Print & layout",
+  },
+  {
+    file: "x.png",
+    title: "Design variant",
+    category: "Print & layout",
+  },
+  {
+    file: "FILE_3857.pdf",
+    title: "Deliverable — FILE_3857",
+    category: "PDF",
+  },
+  {
+    file: "FILE_8093.pdf",
+    title: "Deliverable — FILE_8093",
+    category: "PDF",
+  },
+  {
+    file: "September 2024.pdf",
+    title: "September 2024 — program PDF",
+    category: "PDF",
+  },
+];
+
+export const stuartDesignGallery: DesignItem[] = stuartDesignFiles.map(
+  ({ file, title, category }) => ({
+    title,
+    category,
+    src: publicDesignHref(file),
+  }),
+);
+
 export type ExperienceEntry = {
   id: string;
   role: string;
@@ -94,6 +207,15 @@ export type ExperienceEntry = {
   monogram: string;
   bullets: string[];
   designs?: DesignItem[];
+  /** One-line “what I work on” for the overview card. */
+  workFocus?: string;
+  /** “Where I work” context (team, campus, city). */
+  workplaceDetail?: string;
+  /** Short line before the in-depth bullets. */
+  depthIntro?: string;
+  /** Link to Campus Groups or equivalent student portal. */
+  campusGroupsUrl?: string;
+  campusGroupsLabel?: string;
 };
 
 export const experiences: ExperienceEntry[] = [
@@ -104,22 +226,20 @@ export const experiences: ExperienceEntry[] = [
     location: "Chicago, IL",
     dates: "Sep 2025 — Present",
     monogram: "IT",
+    workFocus:
+      "Student marketing and engagement—event promotion, newsletters, Campus Groups, and on-brand creative that drives attendance and awareness.",
+    workplaceDetail:
+      "Stuart School of Business at Illinois Tech in Chicago. I work with program leads and student organizations so official events, recruitment moments, and chapter communications stay coordinated and visible where students actually look.",
+    depthIntro: "What I do day to day, in depth:",
+    campusGroupsUrl: "https://iit.campusgroups.com/",
+    campusGroupsLabel: "IIT Campus Groups",
     bullets: [
       "Publish official Stuart events and coordinate engagement communications on Campus Groups with targeted newsletters and Google Workspace workflows.",
       "Create marketing content for Stuart events using Canva, Photoshop, and InDesign—supporting recruitment and business development presentations.",
       "Manage student activity pages; use data-informed posting to improve participation, awareness, and stakeholder engagement.",
       "Support graduate pre-term and orientation: onboarding communications in Google Slides, aligned resources, and event logistics for smoother attendance.",
     ],
-    designs: [
-      { title: "Fall Networking Night — Event Flyer", category: "Event Flyer", src: "/designs/design-1.png" },
-      { title: "Graduate Orientation Welcome Post", category: "Social Media", src: "/designs/design-2.png" },
-      { title: "Stuart MBA Info Session Banner", category: "Event Banner", src: "/designs/design-3.png" },
-      { title: "Campus Groups Newsletter Header", category: "Email Header", src: "/designs/design-4.png" },
-      { title: "Toastmasters Weekly Meeting Promo", category: "Social Media", src: "/designs/design-5.png" },
-      { title: "PME Club Recruitment Flyer", category: "Event Flyer", src: "/designs/design-6.png" },
-      { title: "Business Development Presentation Cover", category: "Presentation", src: "/designs/design-7.png" },
-      { title: "Stuart School Brand Asset — Spring", category: "Brand Asset", src: "/designs/design-8.png" },
-    ],
+    designs: stuartDesignGallery,
   },
 ];
 

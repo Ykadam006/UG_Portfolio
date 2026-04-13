@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ArrowLeft, ArrowRight, X, ZoomIn } from "lucide-react";
+import { ArrowLeft, ArrowRight, FileText, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
@@ -40,6 +40,11 @@ const lightboxVariants = {
   exit: { opacity: 0, scale: 0.92, transition: { duration: 0.18, ease: "easeIn" as const } },
 };
 
+function isDesignPdf(src: string) {
+  const path = src.split("?")[0] ?? src;
+  return path.toLowerCase().endsWith(".pdf");
+}
+
 /* ─── Gradient fallback palette ─────────────────────────────────────────── */
 
 const FALLBACK_GRADIENTS = [
@@ -66,6 +71,7 @@ function DesignCard({
 }) {
   const [imgError, setImgError] = useState(false);
   const gradient = FALLBACK_GRADIENTS[index % FALLBACK_GRADIENTS.length];
+  const pdf = isDesignPdf(design.src);
 
   return (
     <motion.div
@@ -77,10 +83,18 @@ function DesignCard({
       className="group cursor-pointer overflow-hidden rounded-2xl border border-white/[0.07] bg-[#0e0e0e]"
       style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.35)" }}
     >
-      {/* Image area */}
       <div className="relative aspect-[4/3] overflow-hidden">
-        {imgError ? (
-          /* Gradient placeholder */
+        {pdf ? (
+          <div
+            className="absolute inset-0 flex flex-col items-center justify-center gap-3 p-4"
+            style={{ background: gradient }}
+          >
+            <FileText className="size-12 text-white/50" strokeWidth={1.25} />
+            <span className="rounded-full border border-white/20 bg-black/20 px-2.5 py-0.5 text-[0.65rem] font-semibold tracking-wider text-white/80 uppercase">
+              PDF
+            </span>
+          </div>
+        ) : imgError ? (
           <div
             className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center"
             style={{ background: gradient }}
@@ -96,23 +110,26 @@ function DesignCard({
             src={design.src}
             alt={design.title}
             fill
+            unoptimized
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             className="object-cover transition-transform duration-500 group-hover:scale-108"
             onError={() => setImgError(true)}
           />
         )}
 
-        {/* Hover overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/0 to-black/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
 
-        {/* Zoom icon */}
         <div className="absolute inset-0 flex items-center justify-center opacity-0 transition-all duration-300 group-hover:opacity-100">
           <motion.span
             initial={{ scale: 0.7 }}
             whileHover={{ scale: 1.1 }}
             className="flex size-11 items-center justify-center rounded-full border border-white/20 bg-white/10 backdrop-blur-md"
           >
-            <ZoomIn className="size-4 text-white" />
+            {pdf ? (
+              <FileText className="size-4 text-white" />
+            ) : (
+              <ZoomIn className="size-4 text-white" />
+            )}
           </motion.span>
         </div>
       </div>
@@ -255,7 +272,14 @@ export function DesignsGallery({
         <div className="border-b border-white/[0.04]" style={{ background: "rgba(4,4,8,0.6)" }}>
           <div className="mx-auto max-w-7xl px-5 py-3 md:px-10">
             <div className="flex flex-wrap items-center gap-2">
-              {["All", "Event Flyer", "Social Media", "Event Banner", "Email Header", "Presentation", "Brand Asset"].map((cat) => (
+              {[
+                "All",
+                "Campaign",
+                "Chapter & meeting",
+                "Marketing visual",
+                "Print & layout",
+                "PDF",
+              ].map((cat) => (
                 <span
                   key={cat}
                   className="rounded-full border border-white/[0.07] bg-white/[0.04] px-3 py-1 text-xs font-medium text-muted-foreground"
@@ -277,7 +301,7 @@ export function DesignsGallery({
           >
             {designs.map((design, i) => (
               <DesignCard
-                key={design.src}
+                key={`${design.src}-${i}`}
                 design={design}
                 index={i}
                 onClick={() => setLightbox(i)}
@@ -287,7 +311,8 @@ export function DesignsGallery({
 
           {/* Footer hint */}
           <p className="mt-12 text-center text-xs text-muted-foreground/50">
-            Click any card to view full size · ESC to close
+            Click any card to view full size · PDFs open in the viewer (or new tab) · ESC
+            to close
           </p>
         </div>
       </motion.div>
@@ -319,7 +344,7 @@ export function DesignsGallery({
               <div className="relative min-h-[40vh] flex-1 overflow-hidden"
                 style={{ maxHeight: "75vh" }}
               >
-                <LightboxImage design={designs[lightbox]} index={lightbox} />
+                <LightboxMedia design={designs[lightbox]} index={lightbox} />
               </div>
 
               {/* Info footer */}
@@ -369,11 +394,34 @@ export function DesignsGallery({
   );
 }
 
-/* ── LightboxImage handles img error gracefully ─────────────────────────── */
+/* ── Lightbox: raster or PDF ───────────────────────────────────────────── */
 
-function LightboxImage({ design, index }: { design: DesignItem; index: number }) {
+function LightboxMedia({ design, index }: { design: DesignItem; index: number }) {
   const [imgError, setImgError] = useState(false);
   const gradient = FALLBACK_GRADIENTS[index % FALLBACK_GRADIENTS.length];
+  const pdf = isDesignPdf(design.src);
+
+  if (pdf) {
+    return (
+      <div className="flex h-full min-h-[50vh] w-full flex-col bg-[#111]">
+        <iframe
+          title={design.title}
+          src={design.src}
+          className="min-h-[50vh] w-full flex-1 border-0 bg-[#1a1a1a]"
+        />
+        <div className="border-t border-white/[0.06] px-4 py-3 text-center">
+          <a
+            href={design.src}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-accent underline-offset-4 hover:underline"
+          >
+            Open PDF in new tab
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   if (imgError) {
     return (
@@ -382,14 +430,14 @@ function LightboxImage({ design, index }: { design: DesignItem; index: number })
         style={{ background: gradient }}
       >
         <div>
-          <p className="text-xs font-semibold tracking-widest text-white/50 uppercase mb-3">
+          <p className="mb-3 text-xs font-semibold tracking-widest text-white/50 uppercase">
             {design.category}
           </p>
-          <p className="text-2xl font-bold text-white/80 leading-snug max-w-sm">
+          <p className="max-w-sm text-2xl font-bold leading-snug text-white/80">
             {design.title}
           </p>
           <p className="mt-4 text-xs text-white/40">
-            Add image to /public/designs/
+            Could not load image — check <code className="text-white/60">public/Design/</code>
           </p>
         </div>
       </div>
@@ -402,6 +450,7 @@ function LightboxImage({ design, index }: { design: DesignItem; index: number })
         src={design.src}
         alt={design.title}
         fill
+        unoptimized
         sizes="(max-width: 1024px) 100vw, 80vw"
         className="object-contain"
         onError={() => setImgError(true)}
