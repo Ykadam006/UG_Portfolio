@@ -72,7 +72,6 @@ export function Projects() {
               key={project.id}
               project={project}
               className={loneLastRowClass(index, total)}
-              imagePriority={index === 0 && Boolean(project.listCoverImage)}
             />
           ))}
         </StaggerChildren>
@@ -85,11 +84,9 @@ export function Projects() {
 function ProjectCard({
   project,
   className,
-  imagePriority,
 }: {
   project: Project;
   className?: string;
-  imagePriority?: boolean;
 }) {
   const { bg, accent } = cardStyleForId(project.id);
 
@@ -152,7 +149,7 @@ function ProjectCard({
                   fill
                   className="object-cover"
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  priority={Boolean(imagePriority)}
+                  fetchPriority="low"
                 />
               </div>
             ) : (
