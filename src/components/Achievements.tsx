@@ -6,8 +6,14 @@ import type { ComponentType } from "react";
 
 import { SectionReveal } from "@/components/SectionReveal";
 import { StaggerChildren } from "@/components/StaggerChildren";
-import { StatsComposition } from "@/components/StatsComposition";
 import { achievements } from "@/lib/data";
+
+/** Lazy — keeps `remotion` out of the main achievements chunk until this loads. */
+const StatsComposition = dynamic(
+  () =>
+    import("@/components/StatsComposition").then((m) => m.StatsComposition),
+  { ssr: false },
+);
 
 /* ─── Remotion Player — dynamic import (no SSR) ─────────────────────────── */
 type PlayerProps = {

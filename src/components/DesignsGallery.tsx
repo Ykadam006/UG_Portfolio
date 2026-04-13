@@ -3,9 +3,18 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, FileText, X, ZoomIn } from "lucide-react";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import type { DesignItem } from "@/lib/data";
+
+/** Preferred chip order; only categories present in `designs` are shown. */
+const CATEGORY_ORDER = [
+  "Campaign",
+  "Chapter & meeting",
+  "Marketing visual",
+  "Print & layout",
+  "PDF",
+] as const;
 
 /* ─── Motion variants ──────────────────────────────────────────────────── */
 
@@ -157,24 +166,51 @@ export function DesignsGallery({
   onClose: () => void;
 }) {
   const [lightbox, setLightbox] = useState<number | null>(null);
+  const [activeCategory, setActiveCategory] = useState<string>("All");
+
+  const filterChips = useMemo(() => {
+    const present = new Set(designs.map((d) => d.category));
+    const ordered = CATEGORY_ORDER.filter((c) => present.has(c));
+    const known = new Set<string>(CATEGORY_ORDER);
+    const extras = [...present].filter((c) => !known.has(c)).sort();
+    return ["All", ...ordered, ...extras];
+  }, [designs]);
+
+  const visibleDesigns = useMemo(() => {
+    if (activeCategory === "All") return designs;
+    return designs.filter((d) => d.category === activeCategory);
+  }, [designs, activeCategory]);
+
+  /* If data changes and the current filter has no rows, fall back to All. */
+  useEffect(() => {
+    if (activeCategory !== "All" && !filterChips.includes(activeCategory)) {
+      setActiveCategory("All");
+    }
+  }, [activeCategory, filterChips]);
+
+  /* Changing filter while lightbox is open would desync indices — close it. */
+  useEffect(() => {
+    setLightbox(null);
+  }, [activeCategory]);
 
   /* Keyboard navigation */
   useEffect(() => {
+    const n = visibleDesigns.length;
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         if (lightbox !== null) setLightbox(null);
         else onClose();
       }
-      if (lightbox !== null) {
+      if (lightbox !== null && n > 0) {
         if (e.key === "ArrowRight")
-          setLightbox((p) => ((p ?? 0) + 1) % designs.length);
+          setLightbox((p) => ((p ?? 0) + 1) % n);
         if (e.key === "ArrowLeft")
-          setLightbox((p) => ((p ?? 0) - 1 + designs.length) % designs.length);
+          setLightbox((p) => ((p ?? 0) - 1 + n) % n);
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [lightbox, designs.length, onClose]);
+  }, [lightbox, visibleDesigns.length, onClose]);
 
   /* Lock scroll */
   useEffect(() => {
@@ -253,7 +289,9 @@ export function DesignsGallery({
             </div>
             <div className="flex items-center gap-4">
               <span className="hidden text-sm text-muted-foreground sm:block">
-                {designs.length} pieces
+                {activeCategory === "All"
+                  ? `${designs.length} pieces`
+                  : `${visibleDesigns.length} of ${designs.length}`}
               </span>
               <motion.button
                 onClick={onClose}
@@ -271,22 +309,26 @@ export function DesignsGallery({
         {/* Subheader bar */}
         <div className="border-b border-white/[0.04]" style={{ background: "rgba(4,4,8,0.6)" }}>
           <div className="mx-auto max-w-7xl px-5 py-3 md:px-10">
-            <div className="flex flex-wrap items-center gap-2">
-              {[
-                "All",
-                "Campaign",
-                "Chapter & meeting",
-                "Marketing visual",
-                "Print & layout",
-                "PDF",
-              ].map((cat) => (
-                <span
-                  key={cat}
-                  className="rounded-full border border-white/[0.07] bg-white/[0.04] px-3 py-1 text-xs font-medium text-muted-foreground"
-                >
-                  {cat}
-                </span>
-              ))}
+            <div className="flex flex-wrap items-center gap-2" role="tablist" aria-label="Filter by category">
+              {filterChips.map((cat) => {
+                const selected = activeCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    type="button"
+                    role="tab"
+                    aria-selected={selected}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+                      selected
+                        ? "border-accent/50 bg-accent/15 text-accent"
+                        : "border-white/[0.07] bg-white/[0.04] text-muted-foreground hover:border-white/15 hover:text-foreground"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -299,14 +341,20 @@ export function DesignsGallery({
             animate="visible"
             className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4"
           >
-            {designs.map((design, i) => (
-              <DesignCard
-                key={`${design.src}-${i}`}
-                design={design}
-                index={i}
-                onClick={() => setLightbox(i)}
-              />
-            ))}
+            {visibleDesigns.length === 0 ? (
+              <p className="col-span-full py-16 text-center text-sm text-muted-foreground">
+                No pieces in this category.
+              </p>
+            ) : (
+              visibleDesigns.map((design, i) => (
+                <DesignCard
+                  key={design.src}
+                  design={design}
+                  index={i}
+                  onClick={() => setLightbox(i)}
+                />
+              ))
+            )}
           </motion.div>
 
           {/* Footer hint */}
@@ -319,7 +367,7 @@ export function DesignsGallery({
 
       {/* ── Lightbox ───────────────────────────────────────────────────── */}
       <AnimatePresence>
-        {lightbox !== null && (
+        {lightbox !== null && visibleDesigns.length > 0 && (
           <motion.div
             key="lightbox-backdrop"
             initial={{ opacity: 0 }}
@@ -342,34 +390,42 @@ export function DesignsGallery({
             >
               {/* Large preview — full flyer visible (object-contain) */}
               <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-black/90">
-                <LightboxMedia design={designs[lightbox]} index={lightbox} />
+                <LightboxMedia design={visibleDesigns[lightbox]} index={lightbox} />
               </div>
 
               {/* Info footer — compact strip so image keeps maximum height */}
               <div className="flex shrink-0 items-center justify-between border-t border-white/[0.06] px-4 py-3 md:px-5 md:py-3.5">
                 <div>
                   <p className="text-[0.6rem] font-bold tracking-[0.15em] text-accent uppercase">
-                    {designs[lightbox].category}
+                    {visibleDesigns[lightbox].category}
                   </p>
                   <p className="mt-0.5 text-sm font-medium text-foreground">
-                    {designs[lightbox].title}
+                    {visibleDesigns[lightbox].title}
                   </p>
                 </div>
                 <span className="text-xs text-muted-foreground">
-                  {lightbox + 1} / {designs.length}
+                  {lightbox + 1} / {visibleDesigns.length}
                 </span>
               </div>
 
               {/* Nav arrows */}
               <button
-                onClick={(e) => { e.stopPropagation(); setLightbox((p) => ((p ?? 0) - 1 + designs.length) % designs.length); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const n = visibleDesigns.length;
+                  setLightbox((p) => ((p ?? 0) - 1 + n) % n);
+                }}
                 className="absolute left-3 top-1/2 -translate-y-1/2 flex size-9 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
                 aria-label="Previous"
               >
                 <ArrowLeft className="size-4" />
               </button>
               <button
-                onClick={(e) => { e.stopPropagation(); setLightbox((p) => ((p ?? 0) + 1) % designs.length); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  const n = visibleDesigns.length;
+                  setLightbox((p) => ((p ?? 0) + 1) % n);
+                }}
                 className="absolute right-3 top-1/2 -translate-y-1/2 flex size-9 items-center justify-center rounded-full border border-white/10 bg-black/50 text-white backdrop-blur-sm transition-colors hover:bg-black/70"
                 aria-label="Next"
               >

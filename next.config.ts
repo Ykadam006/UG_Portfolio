@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  /** Tree-shake lucide barrel imports across the app (smaller client bundles). */
+  experimental: {
+    optimizePackageImports: ["lucide-react", "framer-motion"],
+  },
   async redirects() {
     return [
       {

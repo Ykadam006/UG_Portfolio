@@ -90,7 +90,10 @@ export function publicDesignHref(filename: string): string {
   return `/Design/${encodeURIComponent(filename)}`;
 }
 
-/** All creative files in `public/Design/` for Stuart School experience gallery. */
+/**
+ * Creative files in `public/Design/` for the Stuart School gallery.
+ * Keep this list in sync with the folder — only files that exist are listed.
+ */
 const stuartDesignFiles: { file: string; title: string; category: string }[] = [
   {
     file: "UNLOCK YOUR VOICE.png",
@@ -103,59 +106,29 @@ const stuartDesignFiles: { file: string; title: string; category: string }[] = [
     category: "Campaign",
   },
   {
-    file: "1.png 2.png 3.png 4.png 5.png 6.png",
-    title: "Multi-format campaign set (composite)",
-    category: "Campaign",
-  },
-  {
     file:
       "February 13, 2026 Meeting Theme Celebrating Connection President Lyzzette Torres Rodriguez VP Education Muhit Newaz VP Membership Nithin Shankar VP Public Relations Unnati Agrawal Secretary Shaill (4).png",
     title: "Meeting theme — celebrating connection (officer slate)",
     category: "Chapter & meeting",
   },
   {
-    file: "IMG_0163.png",
+    file: "IMG_3278.png",
     title: "Stuart marketing visual — 01",
     category: "Marketing visual",
   },
   {
-    file: "IMG_0428.png",
+    file: "IMG_4546.png",
     title: "Stuart marketing visual — 02",
     category: "Marketing visual",
   },
   {
-    file: "IMG_1282.png",
+    file: "IMG_6260.png",
     title: "Stuart marketing visual — 03",
     category: "Marketing visual",
   },
   {
-    file: "IMG_3278.png",
-    title: "Stuart marketing visual — 04",
-    category: "Marketing visual",
-  },
-  {
-    file: "IMG_3575.png",
-    title: "Stuart marketing visual — 05",
-    category: "Marketing visual",
-  },
-  {
-    file: "IMG_4546.png",
-    title: "Stuart marketing visual — 06",
-    category: "Marketing visual",
-  },
-  {
-    file: "IMG_5399.png",
-    title: "Stuart marketing visual — 07",
-    category: "Marketing visual",
-  },
-  {
-    file: "IMG_6260.png",
-    title: "Stuart marketing visual — 08",
-    category: "Marketing visual",
-  },
-  {
     file: "IMG_8938.png",
-    title: "Stuart marketing visual — 09",
+    title: "Stuart marketing visual — 04",
     category: "Marketing visual",
   },
   {
@@ -172,6 +145,11 @@ const stuartDesignFiles: { file: string; title: string; category: string }[] = [
     file: "x.png",
     title: "Design variant",
     category: "Print & layout",
+  },
+  {
+    file: "1.pdf",
+    title: "Program flyer — PDF",
+    category: "PDF",
   },
   {
     file: "FILE_3857.pdf",
