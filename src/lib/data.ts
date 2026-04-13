@@ -574,6 +574,46 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    id: "case2-takeaways",
+    listCoverImage: "/images/project-case2-profiles.png",
+    caseHeroImage: "/images/project-case2-hands.png",
+    tag: "Case takeaways",
+    title: "Case 2 — Takeaways & synthesis",
+    description:
+      "Structured takeaways from Case 2—insights, implications, and a presentation-ready deck for class discussion.",
+    detail:
+      "Course work capturing the core lessons from Case 2: how the situation connects to strategy and stakeholder decisions, what the evidence supports, and how the narrative lands in slides. Delivered as a PowerPoint deck aligned with the case brief and discussion rubric.",
+    tools: ["PowerPoint", "Case synthesis", "Strategic takeaways", "Presentation"],
+    caseStudy: [
+      {
+        heading: "Context",
+        body:
+          "Case 2 required moving from raw case facts to a clear set of takeaways—what matters for the business, what is uncertain, and what instructors expect students to defend in discussion.",
+      },
+      {
+        heading: "Approach",
+        body:
+          "Organized the deck around a tight storyline: situation recap, key tensions, evidence-backed insights, and explicit implications. Each slide earns its place so the deck supports both presentation and Q&A.",
+      },
+      {
+        heading: "Outcomes",
+        body:
+          "A complete PPTX that doubles as a takeaway artifact: readable on its own and strong when presented live—visual hierarchy, concise bullets, and a visible line from analysis to conclusions.",
+      },
+      {
+        heading: "Learnings",
+        body:
+          "Takeaway decks work best when they name trade-offs and risks, not only wins—credibility in case courses comes from showing judgment, not just summary.",
+      },
+    ],
+    assets: [
+      {
+        label: "Case 2 takeaways deck (PPTX)",
+        filename: "Case2_Takeaways.pptx",
+      },
+    ],
+  },
 ];
 
 export function getProjectBySlug(slug: string) {
