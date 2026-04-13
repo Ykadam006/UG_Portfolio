@@ -311,7 +311,7 @@ export function DesignsGallery({
 
           {/* Footer hint */}
           <p className="mt-12 text-center text-xs text-muted-foreground/50">
-            Click any card to view full size · PDFs open in the viewer (or new tab) · ESC
+            Click any card for a large full-flyer preview · PDFs in viewer or new tab · ESC
             to close
           </p>
         </div>
@@ -336,19 +336,17 @@ export function DesignsGallery({
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="relative mx-4 flex max-h-[90vh] max-w-5xl flex-col overflow-hidden rounded-2xl border border-white/[0.08]"
+              className="relative mx-3 flex h-[min(94vh,1100px)] w-[min(96vw,1280px)] max-w-[96vw] flex-col overflow-hidden rounded-2xl border border-white/[0.08] sm:mx-6"
               style={{ background: "#0a0a0a" }}
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Image wrapper */}
-              <div className="relative min-h-[40vh] flex-1 overflow-hidden"
-                style={{ maxHeight: "75vh" }}
-              >
+              {/* Large preview — full flyer visible (object-contain) */}
+              <div className="relative min-h-0 w-full flex-1 overflow-hidden bg-black/90">
                 <LightboxMedia design={designs[lightbox]} index={lightbox} />
               </div>
 
-              {/* Info footer */}
-              <div className="flex items-center justify-between border-t border-white/[0.06] px-5 py-4">
+              {/* Info footer — compact strip so image keeps maximum height */}
+              <div className="flex shrink-0 items-center justify-between border-t border-white/[0.06] px-4 py-3 md:px-5 md:py-3.5">
                 <div>
                   <p className="text-[0.6rem] font-bold tracking-[0.15em] text-accent uppercase">
                     {designs[lightbox].category}
@@ -403,11 +401,11 @@ function LightboxMedia({ design, index }: { design: DesignItem; index: number })
 
   if (pdf) {
     return (
-      <div className="flex h-full min-h-[50vh] w-full flex-col bg-[#111]">
+      <div className="flex h-full min-h-0 w-full flex-1 flex-col bg-[#111]">
         <iframe
           title={design.title}
           src={design.src}
-          className="min-h-[50vh] w-full flex-1 border-0 bg-[#1a1a1a]"
+          className="min-h-0 w-full flex-1 border-0 bg-[#1a1a1a]"
         />
         <div className="border-t border-white/[0.06] px-4 py-3 text-center">
           <a
@@ -445,14 +443,15 @@ function LightboxMedia({ design, index }: { design: DesignItem; index: number })
   }
 
   return (
-    <div className="relative h-full min-h-[40vh] w-full">
+    <div className="relative h-full min-h-0 w-full p-3 sm:p-5 md:p-8">
       <Image
         src={design.src}
         alt={design.title}
         fill
         unoptimized
-        sizes="(max-width: 1024px) 100vw, 80vw"
-        className="object-contain"
+        sizes="100vw"
+        className="object-contain object-center"
+        priority
         onError={() => setImgError(true)}
       />
     </div>

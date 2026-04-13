@@ -1,6 +1,14 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import {
+  AnimatePresence,
+  motion,
+  type MotionValue,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+} from "framer-motion";
 import {
   ChevronDown,
   ExternalLink,
@@ -9,89 +17,315 @@ import {
   Sparkles,
   Users,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRef, useState } from "react";
 
 import { DesignsGallery } from "@/components/DesignsGallery";
 import { FireWave } from "@/components/FireWave";
 import { SectionReveal } from "@/components/SectionReveal";
-import {
-  type DesignItem,
-  type ExperienceEntry,
-  experiences,
-  site,
-} from "@/lib/data";
+import { type ExperienceEntry, experiences, site } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
-const FLYER_ROTATE_MS = 5_000;
 const EXPERIENCE_SECTION_BG = "#070707";
 
-function isDesignPdf(src: string) {
-  const path = src.split("?")[0] ?? src;
-  return path.toLowerCase().endsWith(".pdf");
-}
+type BubbleSpec = {
+  id: string;
+  size: number;
+  left: string;
+  top: string;
+  /** Soft fill */
+  className: string;
+  delay: number;
+  duration: number;
+  /** Vertical / horizontal flow amplitude */
+  drift: number;
+  /** Cursor parallax multiplier (0–1) — farther bubbles drift more with mouse */
+  parallaxDepth: number;
+};
 
-function RotatingFlyerPreview({
-  designs,
-  className,
+const ORBIT_BUBBLES: BubbleSpec[] = [
+  {
+    id: "a",
+    size: 56,
+    left: "8%",
+    top: "22%",
+    className:
+      "rounded-full bg-gradient-to-br from-violet-500/35 to-indigo-900/50 ring-1 ring-white/15",
+    delay: 0,
+    duration: 2.8,
+    drift: 10,
+    parallaxDepth: 0.85,
+  },
+  {
+    id: "b",
+    size: 40,
+    left: "72%",
+    top: "14%",
+    className:
+      "rounded-full bg-gradient-to-br from-accent/30 to-amber-900/25 ring-1 ring-white/12",
+    delay: 0.35,
+    duration: 3.2,
+    drift: 8,
+    parallaxDepth: 0.65,
+  },
+  {
+    id: "c",
+    size: 36,
+    left: "78%",
+    top: "58%",
+    className:
+      "rounded-full bg-gradient-to-br from-purple-600/30 to-slate-900/45 ring-1 ring-white/10",
+    delay: 0.7,
+    duration: 2.5,
+    drift: 12,
+    parallaxDepth: 1,
+  },
+  {
+    id: "d",
+    size: 44,
+    left: "6%",
+    top: "62%",
+    className:
+      "rounded-full bg-gradient-to-br from-fuchsia-500/25 to-violet-950/40 ring-1 ring-white/12",
+    delay: 0.2,
+    duration: 3.4,
+    drift: 9,
+    parallaxDepth: 0.75,
+  },
+  {
+    id: "e",
+    size: 28,
+    left: "48%",
+    top: "8%",
+    className: "rounded-full bg-white/10 ring-1 ring-white/15",
+    delay: 0.55,
+    duration: 2.2,
+    drift: 6,
+    parallaxDepth: 0.5,
+  },
+  {
+    id: "f",
+    size: 22,
+    left: "42%",
+    top: "78%",
+    className: "rounded-full bg-accent/25 ring-1 ring-accent/20",
+    delay: 0.9,
+    duration: 2.6,
+    drift: 7,
+    parallaxDepth: 0.55,
+  },
+];
+
+const springConfig = { stiffness: 220, damping: 26, mass: 0.4 };
+
+const easeFlow = [0.42, 0, 0.58, 1] as const;
+
+function OrbitBubble({
+  b,
+  springX,
+  springY,
+  reduceMotion,
 }: {
-  designs: DesignItem[];
-  className?: string;
+  b: BubbleSpec;
+  springX: MotionValue<number>;
+  springY: MotionValue<number>;
+  reduceMotion: boolean;
 }) {
-  const raster = designs.filter((d) => !isDesignPdf(d.src));
-  const [index, setIndex] = useState(0);
-  const reduceMotion = useReducedMotion();
-
-  useEffect(() => {
-    if (raster.length <= 1) return;
-    if (reduceMotion) return;
-    const id = window.setInterval(() => {
-      setIndex((n) => (n + 1) % raster.length);
-    }, FLYER_ROTATE_MS);
-    return () => window.clearInterval(id);
-  }, [raster.length, reduceMotion]);
-
-  if (raster.length === 0) return null;
-
-  const current = raster[index % raster.length];
+  const px = useTransform(springX, (x) => x * 18 * b.parallaxDepth);
+  const py = useTransform(springY, (y) => y * 14 * b.parallaxDepth);
 
   return (
-    <div className={cn("flex min-h-0 flex-1 flex-col", className)}>
-      <div className="relative min-h-[10rem] w-full flex-1 overflow-hidden rounded-xl border border-white/[0.08] bg-[#0a0a0a] shadow-[0_20px_50px_-24px_rgba(0,0,0,0.8)]">
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={current.src}
-            initial={
-              reduceMotion
-                ? false
-                : { opacity: 0, x: 28, filter: "blur(4px)" }
-            }
-            animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-            exit={
-              reduceMotion
-                ? undefined
-                : { opacity: 0, x: -28, filter: "blur(4px)" }
-            }
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
-            className="absolute inset-0"
-          >
-            <Image
-              src={current.src}
-              alt={current.title}
-              fill
-              unoptimized
-              sizes="(max-width: 1024px) 100vw, 50vw"
-              className="object-cover object-center"
+    <motion.span
+      aria-hidden
+      className="pointer-events-none absolute will-change-transform"
+      style={{
+        width: b.size,
+        height: b.size,
+        left: b.left,
+        top: b.top,
+        x: reduceMotion ? 0 : px,
+        y: reduceMotion ? 0 : py,
+      }}
+    >
+      <motion.span
+        className={cn(
+          "block size-full rounded-full shadow-lg",
+          b.className,
+        )}
+        animate={
+          reduceMotion
+            ? undefined
+            : {
+                y: [0, -b.drift * 1.15, b.drift * 0.55, -b.drift * 0.35, 0],
+                x: [0, b.drift * 0.45, -b.drift * 0.5, b.drift * 0.2, 0],
+                rotate: [0, 5, -4, 3, 0],
+                scale: [1, 1.09, 0.94, 1.06, 1],
+              }
+        }
+        transition={
+          reduceMotion
+            ? undefined
+            : {
+                duration: b.duration * 1.2,
+                repeat: Infinity,
+                repeatType: "mirror",
+                ease: easeFlow,
+                delay: b.delay,
+              }
+        }
+      />
+    </motion.span>
+  );
+}
+
+/** Decorative moving bubbles + logo; no flyer thumbnails — click opens gallery. */
+function DesignBubbleDance({
+  pieceCount,
+  onOpenGallery,
+  className,
+}: {
+  pieceCount: number;
+  onOpenGallery: () => void;
+  className?: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const cursorX = useMotionValue(0);
+  const cursorY = useMotionValue(0);
+  const springX = useSpring(cursorX, springConfig);
+  const springY = useSpring(cursorY, springConfig);
+
+  const stageX = useTransform(springX, (x) => x * 52);
+  const stageY = useTransform(springY, (y) => y * 44);
+  const stageRotate = useTransform(springX, (x) => x * 6);
+
+  const handlePointerMove = (e: React.PointerEvent<HTMLButtonElement>) => {
+    if (reduceMotion) return;
+    const el = btnRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    const nx = ((e.clientX - r.left) / r.width) * 2 - 1;
+    const ny = ((e.clientY - r.top) / r.height) * 2 - 1;
+    cursorX.set(Math.max(-1, Math.min(1, nx)));
+    cursorY.set(Math.max(-1, Math.min(1, ny)));
+  };
+
+  const handlePointerLeave = () => {
+    cursorX.set(0);
+    cursorY.set(0);
+  };
+
+  const centerParallaxX = useTransform(springX, (x) => x * 10);
+  const centerParallaxY = useTransform(springY, (y) => y * 8);
+
+  return (
+    <div className={cn("flex min-h-0 w-full flex-1 flex-col", className)}>
+      <motion.button
+        ref={btnRef}
+        type="button"
+        onClick={onOpenGallery}
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        whileHover={reduceMotion ? undefined : { scale: 1.012 }}
+        whileTap={{ scale: 0.985 }}
+        transition={{ duration: 0.2 }}
+        className="group relative mx-auto flex min-h-[200px] w-full max-w-md flex-1 cursor-pointer flex-col overflow-visible rounded-2xl border border-white/[0.1] bg-black/30 p-6 text-left outline-none transition-colors hover:border-accent/35 hover:bg-black/45 focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-[#070707] md:min-h-[240px] md:p-8 lg:max-w-none"
+        aria-label={`Open design gallery — ${pieceCount} pieces`}
+      >
+        <span className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:shadow-[0_0_40px_-8px_rgba(201,168,76,0.25)]" />
+
+        {/* Whole cluster: cursor-driven drift + tilt */}
+        <motion.div
+          className="pointer-events-none absolute inset-0"
+          style={
+            reduceMotion
+              ? undefined
+              : {
+                  x: stageX,
+                  y: stageY,
+                  rotate: stageRotate,
+                }
+          }
+        >
+          {/* Orbit bubbles — mirrored flow + per-bubble cursor parallax */}
+          {ORBIT_BUBBLES.map((b) => (
+            <OrbitBubble
+              key={b.id}
+              b={b}
+              springX={springX}
+              springY={springY}
+              reduceMotion={Boolean(reduceMotion)}
             />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-      {raster.length > 1 ? (
-        <p className="mt-2 shrink-0 text-[0.65rem] text-muted-foreground/70">
-          Preview cycles every 5 seconds · {index + 1} of {raster.length}
+          ))}
+
+          {/* Center “logo” cluster — parallax wrapper + inner flow */}
+          <div className="absolute left-1/2 top-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center">
+            <motion.div
+              aria-hidden
+              style={
+                reduceMotion
+                  ? undefined
+                  : { x: centerParallaxX, y: centerParallaxY }
+              }
+            >
+              <motion.div
+                className="relative flex size-[5.5rem] items-center justify-center rounded-full border-2 border-accent/40 bg-gradient-to-b from-black/60 to-black/90 shadow-[0_12px_40px_-12px_rgba(201,168,76,0.35)] ring-4 ring-accent/10 md:size-24"
+                animate={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        y: [0, -16, 4, -10, 0],
+                        rotate: [0, 2.5, -2, 1.2, 0],
+                        scale: [1, 1.04, 0.98, 1.03, 1],
+                      }
+                }
+                transition={
+                  reduceMotion
+                    ? undefined
+                    : {
+                        duration: 4.2,
+                        repeat: Infinity,
+                        repeatType: "mirror",
+                        ease: easeFlow,
+                      }
+                }
+              >
+                <Palette className="size-9 text-accent md:size-10" strokeWidth={1.25} />
+                <motion.span
+                  className="absolute -right-1 -top-1 flex size-8 items-center justify-center rounded-full border border-white/20 bg-violet-600/80 text-[0.65rem] font-bold text-white shadow-md"
+                  animate={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          scale: [1, 1.14, 0.95, 1.1, 1],
+                          rotate: [0, 10, -8, 6, 0],
+                          y: [0, -3, 2, 0],
+                        }
+                  }
+                  transition={
+                    reduceMotion
+                      ? undefined
+                      : {
+                          duration: 2.8,
+                          repeat: Infinity,
+                          repeatType: "mirror",
+                          ease: easeFlow,
+                          delay: 0.25,
+                        }
+                  }
+                >
+                  <Sparkles className="size-4" />
+                </motion.span>
+              </motion.div>
+            </motion.div>
+          </div>
+        </motion.div>
+
+        <p className="pointer-events-none relative z-[1] mt-auto text-center text-[0.65rem] font-medium tracking-wide text-muted-foreground/90">
+          Move the cursor over the bubbles · click to open gallery ·{" "}
+          <span className="text-accent/90">{pieceCount} pieces</span>
         </p>
-      ) : null}
+      </motion.button>
     </div>
   );
 }
@@ -276,35 +510,23 @@ function ExperienceOverviewAndDesign({
               Flyer &amp; design work
             </h3>
             <p className="mt-3 w-full text-sm leading-relaxed text-muted-foreground md:text-base">
-              Event flyers, meeting graphics, social-ready assets, and print layouts
-              I&apos;ve produced for Stuart programs, Toastmasters, and campus
-              channels—open the gallery to browse everything.
+              Flyers and campaign art live in the gallery—no previews here, just a
+              playful hint. Tap the dancing bubbles to browse everything.
             </p>
           </div>
 
-          {entry.designs ? (
-            <RotatingFlyerPreview
-              designs={entry.designs}
-              className="mt-5 flex-1 md:min-h-[16rem]"
+          {entry.designs?.length ? (
+            <DesignBubbleDance
+              pieceCount={designCount}
+              onOpenGallery={onOpenGallery}
+              className="mt-5 flex-1 md:min-h-[14rem]"
             />
           ) : null}
 
-          <div className="mt-5 shrink-0 space-y-4 pt-2">
+          <div className="mt-4 shrink-0">
             <p className="text-[0.65rem] font-semibold tracking-widest text-muted-foreground uppercase">
               {designCount} pieces in portfolio
             </p>
-            <motion.button
-              type="button"
-              onClick={onOpenGallery}
-              whileHover={{ scale: 1.02, y: -1 }}
-              whileTap={{ scale: 0.98 }}
-              transition={{ duration: 0.18 }}
-              className="group inline-flex w-full items-center justify-center gap-2.5 rounded-full border border-accent/40 bg-black/45 px-6 py-3.5 text-sm font-semibold text-accent shadow-[0_12px_40px_-16px_rgba(198,124,78,0.35)] backdrop-blur-sm transition-colors hover:border-accent/60 hover:bg-black/55"
-            >
-              <Palette className="size-4 transition-transform duration-300 group-hover:rotate-12" />
-              View my designs
-              <Sparkles className="size-3.5 opacity-60" />
-            </motion.button>
           </div>
         </div>
       </div>
